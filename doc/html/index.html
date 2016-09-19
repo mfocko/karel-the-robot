@@ -1,0 +1,232 @@
+
+<!-- saved from url=(0062)file:///home/mirek/Projekty/tuke/pvjc/scenarios/api/index.html -->
+<html xmlns:j="http://kpi.fei.tuke.sk/tjava" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:p="http://kpi.fei.tuke.sk/practices"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Karel Language Reference</title>
+<meta http-equiv="Content-Language" content="sk">
+
+<link rel="stylesheet" type="text/css" href="style.css">
+</head><body>
+<div class="background">
+<div class="header">
+<div id="logo">
+<h1>Karel the Robot Library</h1>
+</div>
+<div class="menu">
+</div>
+</div>
+<div id="content">
+
+    
+<div class="title">Karel Language Reference</div>
+
+
+    
+        
+<div class="subtitle">Primitives</div>
+
+        
+<ul>
+            
+<li>
+                
+<tt><b>void movek()</b></tt> - Move Karel one intersection
+                forward.
+            </li>
+
+            
+<li>
+                
+<tt><b>void turnLeft()</b></tt> - Pivots Karel 90 degrees
+                left.
+            </li>
+
+            
+<li>
+                
+<tt><b>void pickBeeper()</b></tt> - Take a beeper from the
+                current intersection and put it in the beeper bag.
+            </li>
+
+            
+<li>
+                
+<tt><b>void putBeeper()</b></tt> - Take a beeper from the
+                beeper bag and put it at the current intersection.
+            </li>
+
+            
+<li>
+                
+<tt><b>void turnOn(char* path)</b></tt> - Turn Karel on.
+            </li>
+
+            
+<li>
+                
+<tt><b>void turnOff()</b></tt> - Turn Karel off.
+            </li>
+        
+</ul>
+
+
+        
+<div class="subtitle">Sensors</div>
+
+        
+<ul>
+            
+<li>
+                
+<tt><b>int frontIsClear()</b></tt> - 1 if there is no
+                wall directly in front of Karel. 0 if there is.
+            </li>
+
+            
+<li>
+                
+<tt><b>int frontIsBlocked()</b></tt> - 1 if there is a
+                wall directly in front of Karel. 0 otherwise.
+            </li>
+
+            
+<li>
+                
+<tt><b>int leftIsClear()</b></tt> - 1 if there is no
+                wall immediately to Karel's left. 0 if there is.
+            </li>
+
+            
+<li>
+                
+<tt><b>int leftIsBlocked()</b></tt> - 1 if there is a
+                wall immediately to Karel's left. 0 otherwise.
+            </li>
+
+            
+<li>
+                
+<tt><b>int rightIsClear()</b></tt> - 1 if there is no
+                wall immediately to Karel's right. 0 if there is.
+            </li>
+
+            
+<li>
+                
+<tt><b>int rightIsBlocked()</b></tt> - 1 if there is a
+                wall immediately to Karel's right. 0 otherwise.
+            </li>
+
+            
+<li>
+                
+<tt><b>int beepersPresent()</b></tt> - 1 if Karel is
+                standing at an intersection that has a beeper. 0 otherwise.
+            </li>
+
+            
+<li>
+                
+<tt><b>int noBeepersPresent()</b></tt> - 1 if there
+                is not beeper at the current intersection. 0 if there is a
+                beeper at the current intersection.
+            </li>
+
+            
+<li>
+                
+<tt><b>int facingNorth()</b></tt> - 1 if Karel is
+                facing north. 0 otherwise.
+            </li>
+
+            
+<li>
+                
+<tt><b>int notFacingNorth()</b></tt> - 1 if Karel is not
+                facing north. 0 if he is facing north.
+            </li>
+
+            
+<li>
+                
+<tt><b>int facingSouth()</b></tt> - 1 if Karel is facing
+                south. 0 otherwise.
+            </li>
+
+            
+<li>
+                
+<tt><b>int notFacingSouth()</b></tt> - 1 if Karel is not
+                facing south. 0 if he is facing south.
+            </li>
+
+            
+<li>
+                
+<tt><b>int facingEast()</b></tt> - 1 if Karel is facing
+                east. 0 otherwise.
+            </li>
+
+            
+<li>
+                
+<tt><b>int notFacingEast()</b></tt> - 1 if Karel is not
+                facing east. 0 if he is facing east.
+            </li>
+
+            
+<li>
+                
+<tt><b>int facingWest()</b></tt> - 1 if Karel is facing
+                west. 0 otherwise.
+            </li>
+
+            
+<li>
+                
+<tt><b>int notFacingWest()</b></tt> - 1 if Karel is not
+                facing west. 0 if he is facing west.
+            </li>
+
+            
+<li>
+                
+<tt><b>int beepersInBag()</b></tt> - 1 if there
+                is at least one beeper in Karel's beeper bag. 0 if the beeper
+                bag is empty.
+            </li>
+
+            
+<li>
+                
+<tt><b>int noBeepersInBag()</b></tt> - 1 if Karel's
+                beeper bag is empty. 0 if there is at least one beeper in
+                the beeper bag.
+            </li>
+        
+</ul>
+
+        
+<div class="subtitle">Misc</div>
+
+        
+<ul>
+            
+<li>
+                
+<tt><b>void setStepDelay(int)</b></tt> - Sets delay of one
+                Karel's step in miliseconds.
+            </li>
+        
+</ul>
+
+
+</div>
+<div class="footer">
+    Created by: <a href="http://www.cnl.sk/~mirek">mirek</a>, 2010,
+    <a href="http://www.cnl.sk/~mirek">Karel the robot library homepage</a>
+</div>
+</div>
+
+
+</body></html>
