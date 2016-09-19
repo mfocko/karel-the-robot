@@ -331,7 +331,7 @@ void export_data(struct world world, struct robot karel){
                     }else{
                         printf(",\n");
                     }
-                    printf("    {\"x\": %ld, \"y\": %ld, \"count\": %d}", col, row, world.data[row][col]);
+                    printf("    {\"x\": %zu, \"y\": %zu, \"count\": %d}", col, row, world.data[row][col]);
                 }
             }
         }
@@ -347,7 +347,7 @@ void export_data(struct world world, struct robot karel){
         for(size_t row = 0; row < world.height/2+1; row++){
             for(size_t col = 0; col < world.width/2+1; col++){
                 if(world.data[row][col] > 0){
-                    printf("B %ld %ld %d\n", col, row, world.data[row][col]);
+                    printf("B %zu %zu %d\n", col, row, world.data[row][col]);
                 }
             }
         }

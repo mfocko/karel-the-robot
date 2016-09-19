@@ -5,28 +5,29 @@ project("Karel the Robot C Library" C)
 set(PROJECT_VERSION_MAJOR 2016)
 set(PROJECT_VERSION_MINOR 1)
 
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+#For the Curses library to load
+find_package(Curses REQUIRED)
+set(CURSES_USE_NCURSES TRUE)
 
 # set compiler flags
-set(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Werror -pedantic")
-set(GCC_COVERAGE_LINK_FLAGS    "-lm -lcurses")
-
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+set(CMAKE_C_FLAGS  "-Wall -Werror -pedantic -std=c11")
+#set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 # Set build features
 set(CMAKE_BUILD_TYPE Release)
 
-#set(CMAKE_LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
-
+# include directories
 include_directories(include)
+include_directories(${CURSES_INCLUDE_DIR})
+
+# build targets
 add_library(karel STATIC src/karel.c src/internals.c)
 set_property(TARGET karel PROPERTY CXX_STANDARD 11)
+target_link_libraries(karel ${CURSES_LIBRARIES})
 
 # install library and header files to /usr/local/{lib,include}
 install(TARGETS karel DESTINATION lib)
 install(FILES "include/karel.h" DESTINATION include)
-
 
 # add subdirectories
 add_subdirectory(doc/examples)

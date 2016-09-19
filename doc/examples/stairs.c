@@ -6,10 +6,8 @@ void turnRight(){
 }
 
 int main(){
-    setStepDelay(10);
     // turn on karel in the world stairs.kw
     turnOn( "stairs.kw");
-    turnOff();
     
     // pick all beepers on all stairs
     loop(3){
