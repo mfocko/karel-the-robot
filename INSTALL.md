@@ -35,10 +35,10 @@ To compile this package:
 
 Karel the robot has been run in the following configurations:
 
-amd64-*-linux
-i386-*-linux
-Windows XP
-Windows Vista
-Windows 7
+* amd64-*-linux
+* i386-*-linux
+* Windows XP
+* Windows Vista
+* Windows 7
 
 You will need an ANSI C Compiler (such as GCC), libc library and ncurses library to compile the source.  
