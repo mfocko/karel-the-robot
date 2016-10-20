@@ -20,17 +20,17 @@ Installation instructions for Karel the robot
 
 To compile this package:
 
-1.  Normally, you just `cd' to the directory containing the cmake's `CMakeLists.txt` file.
+1.  Normally, you just `cd` to the directory containing the cmake's `CMakeLists.txt` file.
 
-2.  Type `mkdir build && cd build' to create `build` directory.
+2.  Type `mkdir build && cd build` to create `build` directory.
 
-3.  Type `cmake ..' to create `Makefile`
+3.  Type `cmake ..` to create `Makefile`
 
-4.  Type `make' to compile the library
+4.  Type `make` to compile the library
 
-5.  Type `make install' to install library and the documentation.
+5.  Type `make install` to install library and the documentation.
 
-6.  You can remove the compiled library and object files from the directory by typing `make clean'.  
+6.  You can remove the compiled library and object files from the directory by typing `make clean`.  
 
 
 Where to get more information on Karel the robot
