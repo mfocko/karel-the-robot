@@ -5,8 +5,7 @@ This file contains:
 - Where to get more information on Karel the robot
 - Notes about Karel the robot installation
 
-Build requirements for Karel the robot
-----------------------------------------------------
+## Build requirements for Karel the robot
 
 - gcc
 - cmake
@@ -15,8 +14,7 @@ Build requirements for Karel the robot
 - gettext
 
 
-Installation instructions for Karel the robot
-----------------------------------------------------
+## Installation instructions for Karel the robot
 
 To compile this package:
 
@@ -33,16 +31,7 @@ To compile this package:
 6.  You can remove the compiled library and object files from the directory by typing `make clean`.  
 
 
-Where to get more information on Karel the robot
--------------------------------------------------------
-
-There is a homepage with latest realease of library and other news at:
-
-http://www.cnl.sk/~mirek
-
-
-Notes about Karel the robot installation
------------------------------------------------
+## Notes about Karel the robot installation
 
 Karel the robot has been run in the following configurations:
 
