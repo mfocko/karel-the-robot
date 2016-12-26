@@ -34,7 +34,6 @@ bool beepersInBag(){
 
 
 bool noBeepersInBag(){
-    checkKarelState();
     return !beepersInBag();
 }
 
@@ -70,7 +69,6 @@ bool frontIsClear(){
 
 
 bool frontIsBlocked(){
-    checkKarelState();
     return !frontIsClear();
 }
 
@@ -92,7 +90,6 @@ bool leftIsClear(){
 
 
 bool leftIsBlocked(){
-    checkKarelState();
     return !leftIsClear();
 }
 
@@ -114,7 +111,6 @@ bool rightIsClear(){
 
 
 bool rightIsBlocked(){
-    checkKarelState();
     return !rightIsClear();
 }
 
@@ -126,7 +122,6 @@ bool facingNorth(){
 
 
 bool notFacingNorth(){
-    checkKarelState();
     return !facingNorth();
 }
 
@@ -138,7 +133,6 @@ bool facingSouth(){
 
 
 bool notFacingSouth(){
-    checkKarelState();
     return !facingSouth();
 }
 
@@ -150,7 +144,6 @@ bool facingEast(){
 
 
 bool notFacingEast(){
-    checkKarelState();
     return !facingEast();
 }
 
@@ -162,7 +155,6 @@ bool facingWest(){
 
 
 bool notFacingWest(){
-    checkKarelState();
     return !facingWest();
 }
 
@@ -174,7 +166,6 @@ bool beepersPresent(){
 
 
 bool noBeepersPresent(){
-    checkKarelState();
     return !beepersPresent();
 }
 
