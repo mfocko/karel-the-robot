@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.9)
 
 # Set project 
 project("Karel the Robot C Library" C)
-set(PROJECT_VERSION_MAJOR 2016)
+set(PROJECT_VERSION_MAJOR 2018)
 set(PROJECT_VERSION_MINOR 1)
 
 #For the Curses library to load
@@ -28,6 +28,8 @@ target_link_libraries(karel ${CURSES_LIBRARIES})
 # install library and header files to /usr/local/{lib,include}
 install(TARGETS karel DESTINATION lib)
 install(FILES "include/karel.h" DESTINATION include)
+install(DIRECTORY "doc/" DESTINATION share/doc/libkarel USE_SOURCE_PERMISSIONS
+    PATTERN "CMakeLists.txt" EXCLUDE)
 
 # add subdirectories
 add_subdirectory(doc/examples)

@@ -363,7 +363,7 @@ void turnOn(char* path){
                 // check correct position
                 if(column > world.width || row > world.height){
                     fprintf(stderr, 
-                            _("Error: Line %d: Block position is outside the world!\n"), 
+                            _("Error: Line %d: Beeper position is outside the world!\n"), 
                             line);
                     exit(EXIT_FAILURE);
                 }
