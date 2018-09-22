@@ -184,7 +184,7 @@ void movek(){
         }
 
         karel.steps++;
-        sprintf(karel.lastCommand, _("MOVEK"));
+        sprintf(karel.lastCommand, _("MOVE"));
         render(world, karel);
     }else
         errorShutOff(_("Can't move this way"));
@@ -224,7 +224,7 @@ void turnOff(){
 
     // credits
     if(!summary_mode){
-        printf("Created by miroslav.binas@tuke.sk (c)2010, 2016\n");
+        printf("Created by miroslav.binas@tuke.sk (c)2010, 2016, 2018\n");
     }
 
     exit(EXIT_SUCCESS);
@@ -232,19 +232,22 @@ void turnOff(){
 
 
 void turnOn(char* path){
-    int row, column, line, count;
+    int row, column, count;
     char direction, block, orientation;
 
     // open file and read the world params
     FILE *fp = fopen(path, "r");
     if(fp == NULL){
-        fprintf(stderr, _("Error: World file '%s' not found."), path);
+        fprintf(stderr, _("Error: World file '%s' not found.\n"), path);
         exit(EXIT_FAILURE);
     }
 
-    fscanf(fp, "%d %d %d %d %c %d\n",
+    if(fscanf(fp, "%d %d %d %d %c %d\n",
             &world.width, &world.height, &karel.x, &karel.y, &direction,
-            &karel.beepers);
+            &karel.beepers) != 6){
+        fprintf(stderr, _("Error: The world informations are not in correct format!\n"));
+        exit(EXIT_FAILURE);
+    }
 
     // world correction
     world.width = world.width*2-1;
@@ -254,10 +257,18 @@ void turnOn(char* path){
     karel.x = karel.x * 2 - 2;
     karel.y = karel.y * 2 - 2;
 
-    // check the params
-    if(world.width > MAX_WIDTH || world.height > MAX_HEIGHT){
-        fprintf(stderr, _("The given world is greater than the max values of [%dx%d]"), 
-                MAX_WIDTH, MAX_HEIGHT);
+    // check the world dimensions
+    if(world.width > MAX_WIDTH || world.width < 1){
+        fprintf(stderr, 
+                _("Error: The world's width is outside the range [1, %d]!\n"), 
+                MAX_WIDTH);
+        exit(EXIT_FAILURE);
+    }
+    
+    if(world.height > MAX_HEIGHT || world.height < 1){
+        fprintf(stderr, 
+                _("Error: The world's height is outside the range [1, %d]!\n"), 
+                MAX_HEIGHT);
         exit(EXIT_FAILURE);
     }
 
@@ -278,20 +289,33 @@ void turnOn(char* path){
     }
 
     // load the map description
-    line = 2;
+    int line = 2;
     while(fscanf(fp, "%c", &block) != EOF){
 
         switch(toupper(block)){
             case 'W':   {
                 int column2, row2;
 
-                fscanf(fp, "%d %d %c\n", &column, &row, &orientation);
+                // read the data
+                if(fscanf(fp, "%d %d %c\n", &column, &row, &orientation) != 3){
+                    fprintf(stderr, _("Error: Line %d: Incorrect format.\n"), line);
+                    exit(EXIT_FAILURE);
+                }
+
+                // check correct position
+                if(column > world.width || row > world.height){
+                    fprintf(stderr, 
+                            _("Error: Line %d: Wall position is outside the world!\n"), 
+                            line);
+                    exit(EXIT_FAILURE);
+                }
+
                 column2 = column*2-2;
                 row2 = row*2-2;
 
                 // check, if the wall is correctly positioned
                 if(column2 % 2 == 1 || row2 % 2 == 1){
-                    fprintf(stderr, _("Error: Wrong position"));
+                    fprintf(stderr, _("Error: Wrong position.\n"));
                     exit(EXIT_FAILURE);
                 }
 
@@ -301,8 +325,10 @@ void turnOn(char* path){
                     case 'W':   column2--; break;
                     case 'N':   row2++; break;
                     case 'S':   row2--; break;
-                    default :   fprintf(stderr, _("Error: Uknown wall orientation '%c' on "
-                                "line %d in world file."), orientation, line);
+                    default :   fprintf(stderr, 
+                                        _("Error: Uknown wall orientation '%c'"
+                                            " on line %d in world file.\n"), 
+                                        orientation, line);
                                 exit(EXIT_FAILURE);
                 }
 
@@ -328,14 +354,30 @@ void turnOn(char* path){
                 break;
             }
 
-            case 'B':   fscanf(fp, "%d %d %d\n", &column, &row, &count);
-                        world.data[row*2-2][column*2-2] = count;
-                        break;
+            case 'B':   {
+                if(fscanf(fp, "%d %d %d\n", &column, &row, &count) != 3){
+                    fprintf(stderr, _("Error: Line %d: Incorrect format.\n"), line);
+                    exit(EXIT_FAILURE);
+                }
 
-            default :   fprintf(stderr, _("Unknown block character %c "
-                                "on line %d in world file."), block, line);
+                // check correct position
+                if(column > world.width || row > world.height){
+                    fprintf(stderr, 
+                            _("Error: Line %d: Block position is outside the world!\n"), 
+                            line);
+                    exit(EXIT_FAILURE);
+                }
+
+                world.data[row*2-2][column*2-2] = count;
+                break;
+            }
+
+            default :   fprintf(stderr, _("Error: Unknown block character %c "
+                                "on line %d in world file.\n"), block, line);
                         exit(EXIT_FAILURE);
         }
+
+        line++;
     }
 
     // close the file and draw the scene
