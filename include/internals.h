@@ -49,7 +49,7 @@ struct robot{
     int steps;      // nr. of steps
     int beepers;    // nr. of beepers in bag
     bool isRunning; // robot's state
-    char lastCommand[10];   // last executed command
+    char* lastCommand;   // last executed command
 };
 
 

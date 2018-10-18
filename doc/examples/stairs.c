@@ -1,13 +1,14 @@
 #include <karel.h>
 
 void turnRight(){
-    loop(3)
+    loop(3){
         turnLeft();
+    }
 }
 
 int main(){
     // turn on karel in the world stairs.kw
-    turnOn( "stairs.kw");
+    turnOn("stairs.kw");
     
     // pick all beepers on all stairs
     loop(3){
@@ -25,13 +26,9 @@ int main(){
     movek();
 
     // put all beepers
-    while(beepersInBag())
+    while(beepersInBag()){
         putBeeper();
-
-    while(beepersPresent()){
-        pickBeeper();
     }
-
 
     // turn off
     turnOff();

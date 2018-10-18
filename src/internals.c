@@ -7,13 +7,11 @@
 #include <string.h>
 
 #include <libintl.h>
-#include <locale.h>
 
 #define _(STRING) gettext(STRING)
 
 
 #include "internals.h"
-#include "karel.h"
 
 // global variables (application context)
 int stepDelay = 700 * MULTIPLIER;
@@ -21,12 +19,12 @@ bool summary_mode = false;
 
 struct world world;
 struct robot karel =  {
-        0,0,    // position
-        EAST,   // direction
-        0,      // steps
-        0,      // beepers in bag
-        false,  // is running
-        "none"  // last command
+    0,0,    // position
+    EAST,   // direction
+    0,      // steps
+    0,      // beepers in bag
+    false,  // is running
+    "none"  // last command
 };
 
 
@@ -52,18 +50,15 @@ void drawWorld(struct world world, struct robot karel){
         return;
     }
 
-    int column, row;
-
-    move(4, 0);
     // draw horizontal border line
-    printw("ST.+");
-    for(column = 0; column <= world.width * 2; column++){
+    mvprintw(4, 0, "ST.+");
+    for(int column = 0; column <= world.width * 2; column++){
         printw("-");
     }
     printw("+\n");
 
     // draw world
-    for(row = world.height - 1; row >= 0; row--){
+    for(int row = world.height - 1; row >= 0; row--){
         if(row % 2 == 0){
             printw("%2d |", row / 2 + 1);
         }else{
@@ -77,14 +72,14 @@ void drawWorld(struct world world, struct robot karel){
             printw(" ");
         }
 
-        for(column = 0; column < world.width; column++){
+        for(int column = 0; column < world.width; column++){
             int block = world.data[row][column];
             int left = column - 1 >= 0 ? world.data[row][column-1] : WALL;
             int right = column + 1 < world.width ? world.data[row][column+1] : WALL;
             int up = row + 1 < world.height ? world.data[row+1][column] : 0;
             int down = row - 1 >= 0 ? world.data[row-1][column] : 0;
 
-            // handle karel possitions and beepers
+            // handle karel positions and beepers
             if(column % 2 == 0 && row % 2 == 0){ // karel can move on even positions
                 if(block > 0){
                     printBeeper(block);
@@ -102,9 +97,7 @@ void drawWorld(struct world world, struct robot karel){
                     continue;
                 }
 
-                if((up == WALL && down == WALL && left != WALL && right != WALL )){// ||
-                        //(up == WALL && (down != WALL && left != WALL && right != WALL)) ||
-                       // (down == WALL && (up != WALL && left != WALL && right != WALL)) ){
+                if((up == WALL && down == WALL && left != WALL && right != WALL )){
                     printw("| ");
                     continue;
                 }
@@ -118,7 +111,7 @@ void drawWorld(struct world world, struct robot karel){
                 }
 
                 // wall "--"
-                if(up != WALL && down != WALL){//&& left == WALL && right == WALL ){
+                if(up != WALL && down != WALL){
                     printw("--");
                     continue;
                 }
@@ -131,10 +124,7 @@ void drawWorld(struct world world, struct robot karel){
 
                 // not so strict
                 // wall "+-"
-                if(right == WALL && ( (up == WALL || down == WALL)
-                            || (up == WALL && left == WALL)
-                            || (up == WALL && down == WALL) 
-                            || (left == WALL && down == WALL) )){
+                if(right == WALL && (up == WALL || down == WALL)){
                     printw("+-");
                     continue;
                 }
@@ -164,12 +154,12 @@ void drawWorld(struct world world, struct robot karel){
 
     // draw footer
     printw("   +");
-    for(column = 0; column <= world.width * 2; column++){
+    for(int column = 0; column <= world.width * 2; column++){
         printw("-");
     }
     printw("+\n     ");
 
-    for(column = 0; column < world.width; column++){
+    for(int column = 0; column < world.width; column++){
         if(column % 2 == 0){
             printw("%-2d", column / 2 + 1);
         }else{
@@ -204,20 +194,18 @@ void render(struct world world, struct robot karel){
         return;
     }
 
-    char direction[10];
-    move(1,0);
-
     // get the string representation of current orientation
+    char* direction;
     switch(karel.direction){
-        case NORTH  : sprintf(direction, _("NORTH")); break;
-        case SOUTH  : sprintf(direction, _("SOUTH")); break;
-        case WEST   : sprintf(direction, _("WEST")); break;
-        case EAST   : sprintf(direction, _("EAST")); break;
-        default     : sprintf(direction, _("UNKNOWN")); break;
+        case NORTH  : direction = _("NORTH"); break;
+        case SOUTH  : direction = _("SOUTH"); break;
+        case WEST   : direction = _("WEST"); break;
+        case EAST   : direction = _("EAST"); break;
+        default     : direction = _("UNKNOWN"); break;
     }
 
     // draw header first
-    printw(" %-3d %s\n", karel.steps, karel.lastCommand);
+    mvprintw(1, 0, " %-3d %s\n", karel.steps, karel.lastCommand);
     printw(" CORNER  FACING  BEEP-BAG  BEEP-CORNER\n");
     printw(" (%d, %d)   %-5s     %2d        %2d\n",
             (karel.x+2)/2, (karel.y+2)/2, direction, karel.beepers,
@@ -249,11 +237,12 @@ void render(struct world world, struct robot karel){
 
 void errorShutOff(char* message){
     if(summary_mode != true){
-        move(0, 0);
         if(has_colors()){
             attron(COLOR_PAIR(RED_ON_BLACK));
         }
-        printw(_("Error Shutoff! (%s)"), message);
+
+        mvprintw(0, 0, _("Error Shutoff! (%s)"), message);
+
         refresh();
         getchar();
         endwin();
@@ -291,24 +280,25 @@ void deinit(){
         return;
     }
 
-    move(0, 0);
     if(has_colors()){
         attron(COLOR_PAIR(YELLOW_ON_BLACK));
     }
-    printw(_("Press any key to quit..."));
+    mvprintw(0, 0, _("Press any key to quit..."));
     refresh();
     getchar();
     endwin();
 }
 
+
 void export_data(struct world world, struct robot karel){
     // prepare direction
-    char direction = ' ';
+    char direction;
     switch(karel.direction){
-        case 0      : direction = 'E'; break;
-        case 90     : direction = 'N'; break;
-        case 180    : direction = 'W'; break;
-        case 270    : direction = 'S'; break;
+        case EAST   : direction = 'E'; break;
+        case NORTH  : direction = 'N'; break;
+        case WEST   : direction = 'W'; break;
+        case SOUTH  : direction = 'S'; break;
+        default     : direction = ' '; break;
     }
 
     char* type = getenv("LIBKAREL_SUMMARY_MODE_TYPE");
@@ -338,7 +328,6 @@ void export_data(struct world world, struct robot karel){
 
         printf("\n]}");
     }else{
-
         // header
         printf("%d %d %c %d\n",
                 (karel.x+2)/2, (karel.y+2)/2, direction, karel.beepers);
@@ -353,3 +342,4 @@ void export_data(struct world world, struct robot karel){
         }
     }
 }
+

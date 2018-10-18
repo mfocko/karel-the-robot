@@ -100,7 +100,7 @@ bool rightIsClear(){
     enum direction originalDirection = karel.direction;
     karel.direction -= 90;
     if((int)karel.direction < 0){
-        karel.direction = 270;
+        karel.direction = SOUTH;
     }
 
     bool isClear = frontIsClear();
@@ -184,7 +184,7 @@ void movek(){
         }
 
         karel.steps++;
-        sprintf(karel.lastCommand, _("MOVE"));
+        karel.lastCommand = _("MOVE");
         render(world, karel);
     }else
         errorShutOff(_("Can't move this way"));
@@ -199,7 +199,7 @@ void turnLeft(){
         karel.direction = EAST;
     }
     karel.steps++;
-    sprintf(karel.lastCommand, _("TURNLEFT"));
+    karel.lastCommand = _("TURN LEFT");
     
     update(world,karel,0,0);
     render(world, karel);
@@ -207,7 +207,7 @@ void turnLeft(){
 
 
 void turnOff(){
-    sprintf(karel.lastCommand, _("TURNOFF"));
+    karel.lastCommand = _("TURN OFF");
     render(world, karel);
     deinit();
 
@@ -391,7 +391,7 @@ void turnOn(char* path){
 
     // final initialization
     initialize();
-    sprintf(karel.lastCommand, _("TURNON"));
+    karel.lastCommand = _("TURN ON");
     drawWorld(world, karel);
     render(world, karel);
 
@@ -406,7 +406,7 @@ void putBeeper(){
         world.data[karel.y][karel.x]++;
         karel.beepers--;
         karel.steps++;
-        sprintf(karel.lastCommand, _("PUTBEEPER"));
+        karel.lastCommand = _("PUT BEEPER");
         render(world, karel);
     }else{
         errorShutOff(_("Karel has no beeper to put at the corner"));
@@ -421,7 +421,7 @@ void pickBeeper(){
         world.data[karel.y][karel.x]--;
         karel.beepers++;
         karel.steps++;
-        sprintf(karel.lastCommand, _("PICKBEEPER"));
+        karel.lastCommand = _("PICK BEEPER");
         render(world, karel);
     }else{
         errorShutOff(_("There is no beeper at the corner"));
