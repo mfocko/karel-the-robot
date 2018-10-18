@@ -4,3 +4,5 @@
  - gettext support for error messages
  - SDL support for GUI
    - more interesting ;)
+ - support for basic Karel commands only
+     - selectively add option to use "batteries included" Karel
