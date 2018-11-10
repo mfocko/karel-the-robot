@@ -62,24 +62,10 @@ bool beepersPresent();
 
 
 /**
- * Checks, if there are no beepers present at the corner
- * @return true, if there are no beepers, false otherwise
- */
-bool noBeepersPresent();
-
-
-/**
  * Checks, if there are any beepers in the bag
  * @return true, if there are some, false otherwise
  */
 bool beepersInBag();
-
-
-/**
- * Checks, if there are no beepers in the bag
- * @return true, if there are no beepers, false otherwise
- */
-bool noBeepersInBag();
 
 
 /**
@@ -90,94 +76,10 @@ bool frontIsClear();
 
 
 /**
- * Checks, if the front of Karel is not clear to go
- * @return true if it is not clear, false otherwise
- */
-bool frontIsBlocked();
-
-
-/**
- * Checks, if the corner on the left side of Karel is clear to go
- * @return true if it is clear, false otherwise
- */
-bool leftIsClear();
-
-
-/**
- * Checks, if the corner on the left side of Karel is not clear to go
- * @return true if it is not clear, false otherwise
- */
-bool leftIsBlocked();
-
-
-/**
- * Checks, if the corner on the right side of Karel is clear to go
- * @return true if it is clear, false otherwise
- */
-bool rightIsClear();
-
-
-/**
- * Checks, if the corner on the right side of Karel is not clear to go
- * @return true if it is not clear, false otherwise
- */
-bool rightIsBlocked();
-
-
-/**
  * Checks, if Karel is facing north
  * @return true, if yes, false otherwise
  */
 bool facingNorth();
-
-
-/**
- * Checks, if Karel is not facing north
- * @return true, if yes, false otherwise
- */
-bool notFacingNorth();
-
-
-/**
- * Checks, if Karel is facing east
- * @return true, if yes, false otherwise
- */
-bool facingEast();
-
-
-/**
- * Checks, if Karel is not facing east
- * @return true, if yes, false otherwise
- */
-bool notFacingEast();
-
-
-/**
- * Checks, if Karel is facing west
- * @return true, if yes, false otherwise
- */
-bool facingWest();
-
-
-/**
- * Checks, if Karel is not facing west
- * @return true, if yes, false otherwise
- */
-bool notFacingWest();
-
-
-/**
- * Checks, if Karel is facing south
- * @return true, if yes, false otherwise
- */
-bool facingSouth();
-
-
-/**
- * Checks, if Karel is not facing south
- * @return true, if yes, false otherwise
- */
-bool notFacingSouth();
 
 
 // *************************************** Functions
