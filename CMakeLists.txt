@@ -10,7 +10,7 @@ find_package(Curses REQUIRED)
 set(CURSES_USE_NCURSES TRUE)
 
 # set compiler flags
-set(CMAKE_C_FLAGS  "-Wall -Werror -pedantic -std=c11")
+set(CMAKE_C_FLAGS  "-Wall -Werror -pedantic -std=c11 -g")
 #set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 # Set build features

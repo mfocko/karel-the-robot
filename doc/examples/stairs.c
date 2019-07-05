@@ -1,6 +1,6 @@
 #include <karel.h>
 
-void turnRight(){
+void turn_right(){
     loop(3){
         turn_left();
     }
@@ -14,7 +14,7 @@ int main(){
     loop(3){
         turn_left();
         step();
-        turnRight();
+        turn_right();
         step();
         pick_beeper();
     }
@@ -22,7 +22,7 @@ int main(){
     // climb the top stair
     turn_left();
     step();
-    turnRight();
+    turn_right();
     step();
 
     // put all beepers
