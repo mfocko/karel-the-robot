@@ -9,7 +9,7 @@
 #define MAX_HEIGHT  30
 
 // global variables (application context)
-extern int stepDelay;
+extern int step_delay;
 extern bool summary_mode;
 extern struct world world;
 extern struct robot karel;
@@ -64,23 +64,30 @@ enum Colors {
  * Draws scene only
  * Draws only world, without karel and state info
  */
-void drawWorld(struct world world, struct robot karel);
+void _draw_world(struct world world, struct robot karel);
 
 
-void render(struct world world, struct robot karel);
-void update(struct world world, struct robot karel, int dx, int dy);
-void errorShutOff(char* message);
-void initialize();
-void deinit();
+void _render(struct world world, struct robot karel);
+void _update(struct world world, struct robot karel, int dx, int dy);
+void _error_shut_off(char* message);
+void _initialize();
+void _deinit();
 
 /**
  * Exports data about world and karel
- * Export is useful in summary mode only. Summary mode can be enabled 
+ * Export is useful in summary mode only. Summary mode can be enabled
  * with environment variable LIBKAREL_SUMMARY_MODE with it's value "true".
  * @param struct world world data
  * @param struct robot robot karel
  */
-void export_data(struct world world, struct robot karel);
+void _export_data(struct world world, struct robot karel);
+
+
+/**
+ * Checks if Karel is turned on and quits program, if not
+ * Private function.
+ */
+void _check_karel_state();
 
 
 #endif	/* _INTERNALS_H */

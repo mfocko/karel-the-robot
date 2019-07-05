@@ -14,7 +14,7 @@
 #include "internals.h"
 
 // global variables (application context)
-int stepDelay = 700 * MULTIPLIER;
+int step_delay = 700 * MULTIPLIER;
 bool summary_mode = false;
 
 struct world world;
@@ -28,7 +28,7 @@ struct robot karel =  {
 };
 
 
-void printBeeper(int nr){
+void _print_beeper(int nr){
     if(summary_mode == true){
         return;
     }
@@ -45,7 +45,7 @@ void printBeeper(int nr){
 }
 
 
-void drawWorld(struct world world, struct robot karel){
+void draw_world(struct world world, struct robot karel){
     if(summary_mode == true){
         return;
     }
@@ -82,7 +82,7 @@ void drawWorld(struct world world, struct robot karel){
             // handle karel positions and beepers
             if(column % 2 == 0 && row % 2 == 0){ // karel can move on even positions
                 if(block > 0){
-                    printBeeper(block);
+                    _print_beeper(block);
                 }else{
                     printw(". ");
                 }
@@ -130,7 +130,7 @@ void drawWorld(struct world world, struct robot karel){
                 }
 
                 // single wall "| " at top or bottom
-                 if(left != WALL && right != WALL && 
+                 if(left != WALL && right != WALL &&
                          ((up != WALL && down == WALL) || (down != WALL && up == WALL))){
                     printw("| ");
                     continue;
@@ -180,7 +180,7 @@ void update(struct world world, struct robot karel, int dx, int dy){
         if(!summary_mode){
             move(world.height - (karel.y - 2*dy) + 4, 2 * (karel.x - 2*dx) + 5);
             if(block > 0){
-                printBeeper(block);
+                _print_beeper(block);
             }else{
                 printw(". ");
             }
@@ -213,11 +213,11 @@ void render(struct world world, struct robot karel){
 
     // set karel's new position
     move(world.height - karel.y + 4, 2 * karel.x + 5);
-    
+
     if(has_colors()){
         attron(COLOR_PAIR(YELLOW_ON_BLACK) | A_BOLD);
     }
-    
+
     // draw karel
     switch(karel.direction){
         case NORTH  : printw("^ "); break;
@@ -225,17 +225,17 @@ void render(struct world world, struct robot karel){
         case EAST   : printw("> "); break;
         case WEST   : printw("< "); break;
     }
-    
+
     if(has_colors()){
         attroff(COLOR_PAIR(YELLOW_ON_BLACK) | A_BOLD);
     }
 
     refresh();
-    usleep(getStepDelay());
+    usleep(get_step_delay());
 }
 
 
-void errorShutOff(char* message){
+void error_shut_off(char* message){
     if(summary_mode != true){
         if(has_colors()){
             attron(COLOR_PAIR(RED_ON_BLACK));
@@ -343,3 +343,12 @@ void export_data(struct world world, struct robot karel){
     }
 }
 
+/**
+ * Checks if Karel is turned on and quits program, if not
+ * Private function.
+ */
+void _check_karel_state(){
+     if(!karel.isRunning){
+        error_shut_off(_("Karel is not turned On"));
+     }
+}

@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.8.9)
 
-# Set project 
+# Set project
 project("Karel the Robot C Library" C)
-set(PROJECT_VERSION_MAJOR 2018)
-set(PROJECT_VERSION_MINOR 2)
+set(PROJECT_VERSION_MAJOR 2019)
+set(PROJECT_VERSION_MINOR 1)
 
-#For the Curses library to load
+# for the Curses library to load
 find_package(Curses REQUIRED)
 set(CURSES_USE_NCURSES TRUE)
 
@@ -22,12 +22,16 @@ include_directories(${CURSES_INCLUDE_DIR})
 
 # build targets
 add_library(karel STATIC src/karel.c src/internals.c)
+add_library(superkarel STATIC src/superkarel.c src/internals.c)
 set_property(TARGET karel PROPERTY CXX_STANDARD 11)
+set_property(TARGET superkarel PROPERTY CXX_STANDARD 11)
 target_link_libraries(karel ${CURSES_LIBRARIES})
+target_link_libraries(superkarel ${CURSES_LIBRARIES} karel)
 
 # install library and header files to /usr/local/{lib,include}
 install(TARGETS karel DESTINATION lib)
 install(FILES "include/karel.h" DESTINATION include)
+install(FILES "include/superkarel.h" DESTINATION include)
 install(DIRECTORY "doc/" DESTINATION share/doc/libkarel USE_SOURCE_PERMISSIONS
     PATTERN "CMakeLists.txt" EXCLUDE)
 

@@ -14,32 +14,15 @@
 
 
 
-/**
- * Checks if Karel is turned on and quits program, if not
- * Private function.
- */
-void checkKarelState(){
-     if(!karel.isRunning){
-        errorShutOff(_("Karel is not turned On"));
-     }
-}
+// *************************************** Basic Karel's Sensors
 
-
-// *************************************** Sensors
-
-bool beepersInBag(){
-    checkKarelState();
+bool beepers_in_bag(){
+    _check_karel_state();
     return karel.beepers > 0;
 }
 
-
-bool noBeepersInBag(){
-    return !beepersInBag();
-}
-
-
-bool frontIsClear(){
-    checkKarelState();
+bool front_is_clear(){
+    _check_karel_state();
 
     switch(karel.direction){
         case NORTH    :
@@ -68,131 +51,138 @@ bool frontIsClear(){
 }
 
 
-bool frontIsBlocked(){
-    return !frontIsClear();
-}
-
-
-bool leftIsClear(){
-    checkKarelState();
-
-    enum direction originalDirection = karel.direction;
-    karel.direction += 90;
-    if((int)karel.direction > 270){
-        karel.direction = EAST;
-    }
-
-    bool isClear = frontIsClear();
-    karel.direction = originalDirection;
-
-    return isClear;
-}
-
-
-bool leftIsBlocked(){
-    return !leftIsClear();
-}
-
-
-bool rightIsClear(){
-    checkKarelState();
-
-    enum direction originalDirection = karel.direction;
-    karel.direction -= 90;
-    if((int)karel.direction < 0){
-        karel.direction = SOUTH;
-    }
-
-    bool isClear = frontIsClear();
-    karel.direction = originalDirection;
-
-    return isClear;
-}
-
-
-bool rightIsBlocked(){
-    return !rightIsClear();
-}
-
-
-bool facingNorth(){
-    checkKarelState();
+bool facing_north(){
+    _check_karel_state();
     return karel.direction == NORTH;
 }
 
 
-bool notFacingNorth(){
-    return !facingNorth();
-}
-
-
-bool facingSouth(){
-    checkKarelState();
-    return karel.direction == SOUTH;
-}
-
-
-bool notFacingSouth(){
-    return !facingSouth();
-}
-
-
-bool facingEast(){
-    checkKarelState();
-    return karel.direction == EAST;
-}
-
-
-bool notFacingEast(){
-    return !facingEast();
-}
-
-
-bool facingWest(){
-    checkKarelState();
-    return karel.direction == WEST;
-}
-
-
-bool notFacingWest(){
-    return !facingWest();
-}
-
-
-bool beepersPresent(){
-    checkKarelState();
+bool beepers_present(){
+    _check_karel_state();
     return world.data[karel.y][karel.x] > 0;
 }
 
 
-bool noBeepersPresent(){
-    return !beepersPresent();
-}
+// *************************************** Super Karel's Sensors
+
+// bool nobeepers_in_bag(){
+//     return !beepers_in_bag();
+// }
 
 
-// *************************************** Primitives 
+// bool front_is_blocked(){
+//     return !front_is_clear();
+// }
 
-void movek(){
-    checkKarelState();
 
-    if(frontIsClear()){
+// bool left_is_clear(){
+//     _check_karel_state();
+
+//     enum direction originalDirection = karel.direction;
+//     karel.direction += 90;
+//     if((int)karel.direction > 270){
+//         karel.direction = EAST;
+//     }
+
+//     bool isClear = front_is_clear();
+//     karel.direction = originalDirection;
+
+//     return isClear;
+// }
+
+
+// bool left_is_blocked(){
+//     return !left_is_clear();
+// }
+
+
+// bool right_is_clear(){
+//     _check_karel_state();
+
+//     enum direction originalDirection = karel.direction;
+//     karel.direction -= 90;
+//     if((int)karel.direction < 0){
+//         karel.direction = SOUTH;
+//     }
+
+//     bool isClear = front_is_clear();
+//     karel.direction = originalDirection;
+
+//     return isClear;
+// }
+
+
+// bool right_is_blocked(){
+//     return !right_is_clear();
+// }
+
+
+// bool not_facing_north(){
+//     return !facing_north();
+// }
+
+
+// bool facing_south(){
+//     _check_karel_state();
+//     return karel.direction == SOUTH;
+// }
+
+
+// bool not_facing_south(){
+//     return !facing_south();
+// }
+
+
+// bool facing_east(){
+//     _check_karel_state();
+//     return karel.direction == EAST;
+// }
+
+
+// bool not_facing_east(){
+//     return !facing_east();
+// }
+
+
+// bool facing_west(){
+//     _check_karel_state();
+//     return karel.direction == WEST;
+// }
+
+
+// bool not_facing_west(){
+//     return !facing_west();
+// }
+
+
+// bool no_beepers_present(){
+//     return !beepers_present();
+// }
+
+
+// *************************************** Basic Karel's Primitives
+
+void step(){
+    _check_karel_state();
+
+    if(front_is_clear()){
         switch(karel.direction){
-            case NORTH  : karel.y+=2; update(world, karel, 0, 1); break;
-            case SOUTH  : karel.y-=2; update(world, karel, 0, -1); break;
-            case WEST   : karel.x-=2; update(world, karel, -1, 0); break;
-            case EAST   : karel.x+=2; update(world, karel, 1, 0); break;
+            case NORTH  : karel.y+=2; _update(world, karel, 0, 1); break;
+            case SOUTH  : karel.y-=2; _update(world, karel, 0, -1); break;
+            case WEST   : karel.x-=2; _update(world, karel, -1, 0); break;
+            case EAST   : karel.x+=2; _update(world, karel, 1, 0); break;
         }
 
         karel.steps++;
-        karel.lastCommand = _("MOVE");
-        render(world, karel);
+        karel.lastCommand = _("STEP");
+        _render(world, karel);
     }else
-        errorShutOff(_("Can't move this way"));
+        _error_shut_off(_("Can't move this way"));
 }
 
 
-void turnLeft(){
-    checkKarelState();
+void turn_left(){
+    _check_karel_state();
 
     karel.direction += 90;
     if(karel.direction > 270){
@@ -200,22 +190,22 @@ void turnLeft(){
     }
     karel.steps++;
     karel.lastCommand = _("TURN LEFT");
-    
-    update(world,karel,0,0);
-    render(world, karel);
+
+    _update(world,karel, 0, 0);
+    _render(world, karel);
 }
 
 
-void turnOff(){
+void turn_off(){
     karel.lastCommand = _("TURN OFF");
-    render(world, karel);
-    deinit();
+    _render(world, karel);
+    _deinit();
 
     // if summary, then export data
     if(summary_mode){
-        export_data(world, karel);
+        _export_data(world, karel);
     }
-    
+
     // free memory
     for(size_t y = 0; y < world.height; y++){
         free(world.data[y]);
@@ -224,14 +214,14 @@ void turnOff(){
 
     // credits
     if(!summary_mode){
-        printf("Created by miroslav.binas@tuke.sk (c)2010, 2016, 2018\n");
+        printf(_("Created by miroslav.binas@tuke.sk (c)2010, 2016, 2018-2019\n"));
     }
 
     exit(EXIT_SUCCESS);
 }
 
 
-void turnOn(char* path){
+void turn_on(char* path){
     int row, column, count;
     char direction, block, orientation;
 
@@ -259,15 +249,15 @@ void turnOn(char* path){
 
     // check the world dimensions
     if(world.width > MAX_WIDTH || world.width < 1){
-        fprintf(stderr, 
-                _("Error: The world's width is outside the range [1, %d]!\n"), 
+        fprintf(stderr,
+                _("Error: The world's width is outside the range [1, %d]!\n"),
                 MAX_WIDTH);
         exit(EXIT_FAILURE);
     }
-    
+
     if(world.height > MAX_HEIGHT || world.height < 1){
-        fprintf(stderr, 
-                _("Error: The world's height is outside the range [1, %d]!\n"), 
+        fprintf(stderr,
+                _("Error: The world's height is outside the range [1, %d]!\n"),
                 MAX_HEIGHT);
         exit(EXIT_FAILURE);
     }
@@ -281,7 +271,7 @@ void turnOn(char* path){
         default     : fprintf(stderr, _("Error: Uknown Karel's direction\n"));
                       exit(EXIT_FAILURE);
     }
-    
+
     // create empty world
     world.data = (int**)calloc(world.height, sizeof(int*));
     for(size_t y = 0; y < world.height; y++){
@@ -304,8 +294,8 @@ void turnOn(char* path){
 
                 // check correct position
                 if(column > world.width || row > world.height){
-                    fprintf(stderr, 
-                            _("Error: Line %d: Wall position is outside the world!\n"), 
+                    fprintf(stderr,
+                            _("Error: Line %d: Wall position is outside the world!\n"),
                             line);
                     exit(EXIT_FAILURE);
                 }
@@ -325,9 +315,9 @@ void turnOn(char* path){
                     case 'W':   column2--; break;
                     case 'N':   row2++; break;
                     case 'S':   row2--; break;
-                    default :   fprintf(stderr, 
+                    default :   fprintf(stderr,
                                         _("Error: Uknown wall orientation '%c'"
-                                            " on line %d in world file.\n"), 
+                                            " on line %d in world file.\n"),
                                         orientation, line);
                                 exit(EXIT_FAILURE);
                 }
@@ -362,8 +352,8 @@ void turnOn(char* path){
 
                 // check correct position
                 if(column > world.width || row > world.height){
-                    fprintf(stderr, 
-                            _("Error: Line %d: Beeper position is outside the world!\n"), 
+                    fprintf(stderr,
+                            _("Error: Line %d: Beeper position is outside the world!\n"),
                             line);
                     exit(EXIT_FAILURE);
                 }
@@ -390,41 +380,41 @@ void turnOn(char* path){
     }
 
     // final initialization
-    initialize();
+    _initialize();
     karel.lastCommand = _("TURN ON");
-    drawWorld(world, karel);
-    render(world, karel);
+    _draw_world(world, karel);
+    _render(world, karel);
 
     karel.isRunning = true;
 }
 
 
-void putBeeper(){
-    checkKarelState();
+void put_beeper(){
+    _check_karel_state();
 
     if(karel.beepers > 0){
         world.data[karel.y][karel.x]++;
         karel.beepers--;
         karel.steps++;
         karel.lastCommand = _("PUT BEEPER");
-        render(world, karel);
+        _render(world, karel);
     }else{
-        errorShutOff(_("Karel has no beeper to put at the corner"));
+        _error_shut_off(_("Karel has no beeper to put at the corner"));
     }
 }
 
 
-void pickBeeper(){
-    checkKarelState();
+void pick_beeper(){
+    _check_karel_state();
 
     if(world.data[karel.y][karel.x] > 0){
         world.data[karel.y][karel.x]--;
         karel.beepers++;
         karel.steps++;
         karel.lastCommand = _("PICK BEEPER");
-        render(world, karel);
+        _render(world, karel);
     }else{
-        errorShutOff(_("There is no beeper at the corner"));
+        _error_shut_off(_("There is no beeper at the corner"));
     }
 }
 
@@ -432,11 +422,11 @@ void pickBeeper(){
 
 
 
-void setStepDelay(int delay){
-    stepDelay = delay * MULTIPLIER;
+void set_step_delay(int delay){
+    step_delay = delay * MULTIPLIER;
 }
 
 
-int getStepDelay(){
-    return stepDelay;
+int get_step_delay(){
+    return step_delay;
 }

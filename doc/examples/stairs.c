@@ -2,34 +2,34 @@
 
 void turnRight(){
     loop(3){
-        turnLeft();
+        turn_left();
     }
 }
 
 int main(){
     // turn on karel in the world stairs.kw
-    turnOn("stairs.kw");
-    
+    turn_on("stairs.kw");
+
     // pick all beepers on all stairs
     loop(3){
-        turnLeft();
-        movek();
+        turn_left();
+        step();
         turnRight();
-        movek();
-        pickBeeper();
+        step();
+        pick_beeper();
     }
 
     // climb the top stair
-    turnLeft();
-    movek();
+    turn_left();
+    step();
     turnRight();
-    movek();
+    step();
 
     // put all beepers
-    while(beepersInBag()){
-        putBeeper();
+    while(beepers_in_bag()){
+        put_beeper();
     }
 
     // turn off
-    turnOff();
+    turn_off();
 }
