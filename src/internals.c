@@ -5,6 +5,7 @@
 #include <curses.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 
 #include <libintl.h>
 
@@ -190,6 +191,15 @@ void _update(struct world world, struct robot karel, int dx, int dy){
 
 
 void _render(struct world world, struct robot karel){
+    // check input
+    int key = getch();
+    if(key == 'q'){
+        printf("koniec\n");
+        turn_off();
+        // exit
+    }
+//    printf("key: %d\n", key);
+
     if(summary_mode == true){
         return;
     }
@@ -262,6 +272,9 @@ void _initialize(){
         return;
     }
 
+    // handle CTRL+C (signal interrupt)
+    signal(SIGINT, turn_off);
+
     initscr();
     if(has_colors()){
         start_color();
@@ -269,6 +282,11 @@ void _initialize(){
         init_pair(YELLOW_ON_BLACK, COLOR_YELLOW, COLOR_BLACK); // YELLOW on BLACK
         init_pair(WHITE_ON_BLACK, COLOR_WHITE, COLOR_BLACK); // WHITE on BLACK
     }
+
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    cbreak();
 
     // hide cursor
     curs_set(0);
