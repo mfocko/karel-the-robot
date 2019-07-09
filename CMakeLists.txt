@@ -17,16 +17,16 @@ set(CMAKE_C_FLAGS  "-Wall -Werror -pedantic -std=c11 -g")
 set(CMAKE_BUILD_TYPE Release)
 
 # include directories
-include_directories(include)
-include_directories(${CURSES_INCLUDE_DIR})
+include_directories(include ${CURSES_INCLUDE_DIR})
+# include_directories()
 
 # build targets
-add_library(karel STATIC src/karel.c src/internals.c)
-add_library(superkarel STATIC src/superkarel.c src/internals.c)
+add_library(karel STATIC src/karel.c src/superkarel.c src/internals.c)
+# add_library(superkarel STATIC src/superkarel.c src/internals.c)
 set_property(TARGET karel PROPERTY CXX_STANDARD 11)
-set_property(TARGET superkarel PROPERTY CXX_STANDARD 11)
+#set_property(TARGET superkarel PROPERTY CXX_STANDARD 11)
 target_link_libraries(karel ${CURSES_LIBRARIES})
-target_link_libraries(superkarel ${CURSES_LIBRARIES} karel)
+#target_link_libraries(superkarel ${CURSES_LIBRARIES} karel)
 
 # install library and header files to /usr/local/{lib,include}
 install(TARGETS karel DESTINATION lib)

@@ -45,7 +45,7 @@ void _print_beeper(int nr){
 }
 
 
-void draw_world(struct world world, struct robot karel){
+void _draw_world(struct world world, struct robot karel){
     if(summary_mode == true){
         return;
     }
@@ -172,7 +172,7 @@ void draw_world(struct world world, struct robot karel){
 }
 
 
-void update(struct world world, struct robot karel, int dx, int dy){
+void _update(struct world world, struct robot karel, int dx, int dy){
     // update old position, if karel has moved
     if(!(dx == 0 && dy == 0)){
         int block = world.data[karel.y - 2*dy][karel.x - 2*dx];
@@ -189,7 +189,7 @@ void update(struct world world, struct robot karel, int dx, int dy){
 }
 
 
-void render(struct world world, struct robot karel){
+void _render(struct world world, struct robot karel){
     if(summary_mode == true){
         return;
     }
@@ -235,7 +235,7 @@ void render(struct world world, struct robot karel){
 }
 
 
-void error_shut_off(char* message){
+void _error_shut_off(char* message){
     if(summary_mode != true){
         if(has_colors()){
             attron(COLOR_PAIR(RED_ON_BLACK));
@@ -257,7 +257,7 @@ void error_shut_off(char* message){
 /**
  * initilaize curses, and colors if possible
  */
-void initialize(){
+void _initialize(){
     if(summary_mode == true){
         return;
     }
@@ -275,7 +275,7 @@ void initialize(){
 }
 
 
-void deinit(){
+void _deinit(){
     if(summary_mode){
         return;
     }
@@ -290,7 +290,7 @@ void deinit(){
 }
 
 
-void export_data(struct world world, struct robot karel){
+void _export_data(struct world world, struct robot karel){
     // prepare direction
     char direction;
     switch(karel.direction){
@@ -349,6 +349,6 @@ void export_data(struct world world, struct robot karel){
  */
 void _check_karel_state(){
      if(!karel.isRunning){
-        error_shut_off(_("Karel is not turned On"));
+        _error_shut_off(_("Karel is not turned On"));
      }
 }
