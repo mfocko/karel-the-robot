@@ -71,19 +71,19 @@ void step() {
         switch (karel.direction) {
             case NORTH  :
                 karel.y += 2;
-                _update(world, karel, 0, 1);
+                _update(0, 1);
                 break;
             case SOUTH  :
                 karel.y -= 2;
-                _update(world, karel, 0, -1);
+                _update(0, -1);
                 break;
             case WEST   :
                 karel.x -= 2;
-                _update(world, karel, -1, 0);
+                _update(-1, 0);
                 break;
             case EAST   :
                 karel.x += 2;
-                _update(world, karel, 1, 0);
+                _update(1, 0);
                 break;
         }
 
@@ -105,18 +105,18 @@ void turn_left() {
     karel.steps++;
     karel.lastCommand = _("TURN LEFT");
 
-    _update(world, karel, 0, 0);
-    _render(world, karel);
+    _update(0, 0);
+    _render();
 }
 
 
 void turn_off() {
     karel.lastCommand = _("TURN OFF");
-    _render(world, karel);
+    _render();
     _deinit();
 
     // if summary, then export data
-    if (summary_mode) {
+    if (summary.is_active) {
         _export_data(world, karel);
     }
 
@@ -127,7 +127,7 @@ void turn_off() {
     free(world.data);
 
     // credits
-    if (!summary_mode) {
+    if (!summary.is_active) {
         printf(_("Created by miroslav.binas@tuke.sk (c)2010, 2016, 2018-2019\n"));
     }
 
@@ -136,8 +136,17 @@ void turn_off() {
 
 
 void turn_on(char *path) {
-    int row, column, count;
-    char direction, block, orientation;
+    // check, if we are running summary mode
+    char *mode = getenv("LIBKAREL_SUMMARY_MODE");
+    if (mode && strcmp(mode, "true") == 0) {
+        summary.is_active = true;
+
+        // check the type of summary mode
+        char* type = getenv("LIBKAREL_SUMMARY_MODE_TYPE");
+        if(type && strcmp(type, "json") == 0){
+            summary.type = type;
+        }
+    }
 
     // open file and read the world params
     FILE *fp = fopen(path, "r");
@@ -146,10 +155,12 @@ void turn_on(char *path) {
         exit(EXIT_FAILURE);
     }
 
+    int row, column, count;
+    char direction, block, orientation;
+
     if (fscanf(fp, "%d %d %d %d %c %d\n",
-               &world.width, &world.height, &karel.x, &karel.y, &direction,
-               &karel.beepers) != 6) {
-        fprintf(stderr, _("Error: The world informations are not in correct format!\n"));
+               &world.width, &world.height, &karel.x, &karel.y, &direction, &karel.beepers) != 6) {
+        fprintf(stderr, _("Error: The world information are not in correct format!\n"));
         exit(EXIT_FAILURE);
     }
 
@@ -217,9 +228,7 @@ void turn_on(char *path) {
 
                 // check correct position
                 if (column > world.width || row > world.height) {
-                    fprintf(stderr,
-                            _("Error: Line %d: Wall position is outside the world!\n"),
-                            line);
+                    fprintf(stderr, _("Error: Line %d: Wall position is outside the world!\n"), line);
                     exit(EXIT_FAILURE);
                 }
 
@@ -305,12 +314,6 @@ void turn_on(char *path) {
 
     // close the file and draw the scene
     fclose(fp);
-
-    // check, if we are running summary mode
-    char *mode = getenv("LIBKAREL_SUMMARY_MODE");
-    if (mode && strcmp(mode, "true") == 0) {
-        summary_mode = true;
-    }
 
     // final initialization
     _initialize();

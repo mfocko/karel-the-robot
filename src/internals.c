@@ -16,11 +16,10 @@
 
 // global variables (application context)
 int step_delay = 700 * MULTIPLIER;
-bool summary_mode = false;
 
 struct world world;
 struct robot karel =  {
-    0,0,    // position
+    0,0,     // position
     EAST,   // direction
     0,      // steps
     0,      // beepers in bag
@@ -28,9 +27,14 @@ struct robot karel =  {
     "none"  // last command
 };
 
+struct summary summary = {
+    false,  // is is_active
+    NULL    // type
+};
+
 
 void _print_beeper(int nr){
-    if(summary_mode == true){
+    if(summary.is_active == true){
         return;
     }
 
@@ -46,8 +50,8 @@ void _print_beeper(int nr){
 }
 
 
-void _draw_world(struct world world, struct robot karel){
-    if(summary_mode == true){
+void _draw_world(){
+    if(summary.is_active){
         return;
     }
 
@@ -173,12 +177,12 @@ void _draw_world(struct world world, struct robot karel){
 }
 
 
-void _update(struct world world, struct robot karel, int dx, int dy){
+void _update(int dx, int dy){
     // update old position, if karel has moved
     if(!(dx == 0 && dy == 0)){
         int block = world.data[karel.y - 2*dy][karel.x - 2*dx];
 
-        if(!summary_mode){
+        if(!summary.is_active){
             move(world.height - (karel.y - 2*dy) + 4, 2 * (karel.x - 2*dx) + 5);
             if(block > 0){
                 _print_beeper(block);
@@ -190,20 +194,10 @@ void _update(struct world world, struct robot karel, int dx, int dy){
 }
 
 
-void _render(struct world world, struct robot karel){
-    if(summary_mode == true){
+void _render(){
+    if(summary.is_active == true){
         return;
     }
-
-    // check input
-    int key = getch();
-    if(key == 'q'){
-        printf("koniec\n");
-        turn_off();
-        // exit
-    }
-//    printf("key: %d\n", key);
-
 
     // get the string representation of current orientation
     char* direction;
@@ -247,7 +241,7 @@ void _render(struct world world, struct robot karel){
 
 
 void _error_shut_off(char* message){
-    if(summary_mode != true){
+    if(summary.is_active){
         if(has_colors()){
             attron(COLOR_PAIR(RED_ON_BLACK));
         }
@@ -269,7 +263,7 @@ void _error_shut_off(char* message){
  * initilaize curses, and colors if possible
  */
 void _initialize(){
-    if(summary_mode == true){
+    if(summary.is_active){
         return;
     }
 
@@ -295,7 +289,7 @@ void _initialize(){
 
 
 void _deinit(){
-    if(summary_mode){
+    if(summary.is_active){
         return;
     }
 
@@ -309,7 +303,7 @@ void _deinit(){
 }
 
 
-void _export_data(struct world world, struct robot karel){
+void _export_data(){
     // prepare direction
     char direction;
     switch(karel.direction){
@@ -320,8 +314,7 @@ void _export_data(struct world world, struct robot karel){
         default     : direction = ' '; break;
     }
 
-    char* type = getenv("LIBKAREL_SUMMARY_MODE_TYPE");
-    if(type && strcmp(type, "json") == 0){
+    if(summary.type && strcmp(summary.type, "json") == 0){
         printf("{\n"
                 "\"x\": %d,\n"
                 "\"y\": %d,\n"

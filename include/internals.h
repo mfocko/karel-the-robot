@@ -1,7 +1,7 @@
 #include "karel.h"
 
 #ifndef _INTERNALS_H
-#define	_INTERNALS_H
+#define _INTERNALS_H
 
 
 #define MULTIPLIER 1000
@@ -10,11 +10,24 @@
 
 // global variables (application context)
 extern int step_delay;
-extern bool summary_mode;
+extern struct summary summary;
 extern struct world world;
 extern struct robot karel;
 
-enum block{
+
+/**
+ * Summary mode metadata
+ */
+struct summary {
+    bool is_active; // flag to check, if summary is active or not
+    char* type;     // type of summary (e.g. json)
+};
+
+
+/**
+ * Types of blocks
+ */
+enum block {
     CLEAR = 0,
     WALL = -1
 };
@@ -23,7 +36,7 @@ enum block{
 /**
  * World definition
  */
-struct world{
+struct world {
     int width, height;  // world's width and height
     int **data;         // world data definition
 };
@@ -32,7 +45,7 @@ struct world{
 /**
  * Available directions
  */
-enum direction{
+enum direction {
     EAST = 0,
     NORTH = 90,
     WEST = 180,
@@ -43,16 +56,19 @@ enum direction{
 /**
  * Robot definition
  */
-struct robot{
+struct robot {
     int x, y;       // position
     enum direction direction;   // direction
     int steps;      // nr. of steps
     int beepers;    // nr. of beepers in bag
     bool isRunning; // robot's state
-    char* lastCommand;   // last executed command
+    char *lastCommand;   // last executed command
 };
 
 
+/**
+ * Available colors
+ */
 enum Colors {
     RED_ON_BLACK = 1,
     YELLOW_ON_BLACK,
@@ -64,13 +80,20 @@ enum Colors {
  * Draws scene only
  * Draws only world, without karel and state info
  */
-void _draw_world(struct world world, struct robot karel);
+void _draw_world();
 
+/**
+ * Render the screen
+ * Renders the whole screen - with info panel and world together.
+ */
+void _render();
 
-void _render(struct world world, struct robot karel);
-void _update(struct world world, struct robot karel, int dx, int dy);
-void _error_shut_off(char* message);
+void _update(int dx, int dy);
+
+void _error_shut_off(char *message);
+
 void _initialize();
+
 void _deinit();
 
 /**
@@ -90,5 +113,5 @@ void _export_data(struct world world, struct robot karel);
 void _check_karel_state();
 
 
-#endif	/* _INTERNALS_H */
+#endif    /* _INTERNALS_H */
 

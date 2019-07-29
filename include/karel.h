@@ -1,5 +1,5 @@
 #ifndef _KAREL_H
-#define	_KAREL_H
+#define _KAREL_H
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -34,11 +34,11 @@ void turn_left();
  * the file doesn't exist, program will be terminated with error message.
  * @param path location of the world file
  */
-void turn_on(char* path);
+void turn_on(char *path);
 
 
 /**
- * Terminates  Karel's program
+ * Terminates Karel's program
  */
 void turn_off();
 
@@ -100,4 +100,4 @@ void set_step_delay(int delay);
  */
 int get_step_delay();
 
-#endif	/* _KAREL_H */
+#endif    /* _KAREL_H */

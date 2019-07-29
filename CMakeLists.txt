@@ -18,7 +18,6 @@ set(CMAKE_BUILD_TYPE Release)
 
 # include directories
 include_directories(include ${CURSES_INCLUDE_DIR})
-# include_directories()
 
 # build targets
 # karel
