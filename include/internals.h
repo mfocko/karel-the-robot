@@ -61,8 +61,8 @@ struct robot {
     enum direction direction;   // direction
     int steps;      // nr. of steps
     int beepers;    // nr. of beepers in bag
-    bool isRunning; // robot's state
-    char *lastCommand;   // last executed command
+    bool is_running; // robot's state
+    char *last_command;   // last executed command
 };
 
 
@@ -90,8 +90,12 @@ void _render();
 
 void _update(int dx, int dy);
 
-void _error_shut_off(char *message);
+void _error_shut_off(const char *format, ...);
 
+
+/**
+ * initilaize curses, and colors if possible
+ */
 void _initialize();
 
 void _deinit();

@@ -6,29 +6,29 @@
 #include <unistd.h>
 #include <string.h>
 #include <signal.h>
-
 #include <libintl.h>
 
 #define _(STRING) gettext(STRING)
 
-
 #include "internals.h"
+
 
 // global variables (application context)
 int step_delay = 700 * MULTIPLIER;
 
 struct world world;
-struct robot karel =  {
-    0,0,     // position
-    EAST,   // direction
-    0,      // steps
-    0,      // beepers in bag
-    false,  // is running
-    "none"  // last command
-};
+
+struct robot karel; //=  {
+//    0,0,     // position
+//    EAST,   // direction
+//    0,      // steps
+//    0,      // beepers in bag
+//    false,  // is running
+//    "none"  // last command
+//};
 
 struct summary summary = {
-    false,  // is is_active
+    false,  // not active
     NULL    // type
 };
 
@@ -210,7 +210,7 @@ void _render(){
     }
 
     // draw header first
-    mvprintw(1, 0, " %-3d %s\n", karel.steps, karel.lastCommand);
+    mvprintw(1, 0, " %-3d %s\n", karel.steps, karel.last_command);
     printw(" CORNER  FACING  BEEP-BAG  BEEP-CORNER\n");
     printw(" (%d, %d)   %-5s     %2d        %2d\n",
             (karel.x+2)/2, (karel.y+2)/2, direction, karel.beepers,
@@ -240,28 +240,25 @@ void _render(){
 }
 
 
-void _error_shut_off(char* message){
-    if(summary.is_active){
+void _error_shut_off(const char* format, ...){
+    if(!summary.is_active){
         if(has_colors()){
             attron(COLOR_PAIR(RED_ON_BLACK));
         }
 
-        mvprintw(0, 0, _("Error Shutoff! (%s)"), message);
+        mvprintw(0, 0, _("Error Shutoff! (%s)"), format);
 
         refresh();
         getchar();
         endwin();
     }else{
-        fprintf(stderr, _("Error Shutoff! (%s)"), message);
+        fprintf(stderr, _("Error Shutoff! (%s)"), format);
     }
 
     exit(EXIT_FAILURE);
 }
 
 
-/**
- * initilaize curses, and colors if possible
- */
 void _initialize(){
     if(summary.is_active){
         return;
@@ -270,6 +267,7 @@ void _initialize(){
     // handle CTRL+C (signal interrupt)
     signal(SIGINT, turn_off);
 
+    // init ncurses
     initscr();
     if(has_colors()){
         start_color();
@@ -355,12 +353,9 @@ void _export_data(){
     }
 }
 
-/**
- * Checks if Karel is turned on and quits program, if not
- * Private function.
- */
+
 void _check_karel_state(){
-     if(!karel.isRunning){
+     if(!karel.is_running){
         _error_shut_off(_("Karel is not turned On"));
      }
 }

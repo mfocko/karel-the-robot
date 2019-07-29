@@ -88,7 +88,7 @@ void step() {
         }
 
         karel.steps++;
-        karel.lastCommand = _("STEP");
+        karel.last_command = _("STEP");
         _render(world, karel);
     } else
         _error_shut_off(_("Can't move this way"));
@@ -103,7 +103,7 @@ void turn_left() {
         karel.direction = EAST;
     }
     karel.steps++;
-    karel.lastCommand = _("TURN LEFT");
+    karel.last_command = _("TURN LEFT");
 
     _update(0, 0);
     _render();
@@ -111,7 +111,7 @@ void turn_left() {
 
 
 void turn_off() {
-    karel.lastCommand = _("TURN OFF");
+    karel.last_command = _("TURN OFF");
     _render();
     _deinit();
 
@@ -317,11 +317,11 @@ void turn_on(char *path) {
 
     // final initialization
     _initialize();
-    karel.lastCommand = _("TURN ON");
+    karel.last_command = _("TURN ON");
     _draw_world(world, karel);
     _render(world, karel);
 
-    karel.isRunning = true;
+    karel.is_running = true;
 }
 
 
@@ -332,7 +332,7 @@ void put_beeper() {
         world.data[karel.y][karel.x]++;
         karel.beepers--;
         karel.steps++;
-        karel.lastCommand = _("PUT BEEPER");
+        karel.last_command = _("PUT BEEPER");
         _render(world, karel);
     } else {
         _error_shut_off(_("Karel has no beeper to put at the corner"));
@@ -347,7 +347,7 @@ void pick_beeper() {
         world.data[karel.y][karel.x]--;
         karel.beepers++;
         karel.steps++;
-        karel.lastCommand = _("PICK BEEPER");
+        karel.last_command = _("PICK BEEPER");
         _render(world, karel);
     } else {
         _error_shut_off(_("There is no beeper at the corner"));
