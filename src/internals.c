@@ -191,6 +191,10 @@ void _update(struct world world, struct robot karel, int dx, int dy){
 
 
 void _render(struct world world, struct robot karel){
+    if(summary_mode == true){
+        return;
+    }
+
     // check input
     int key = getch();
     if(key == 'q'){
@@ -200,9 +204,6 @@ void _render(struct world world, struct robot karel){
     }
 //    printf("key: %d\n", key);
 
-    if(summary_mode == true){
-        return;
-    }
 
     // get the string representation of current orientation
     char* direction;

@@ -6,7 +6,6 @@
 
 #include "karel.h"
 
-
 // *************************************** Sensors
 /**
  * Checks, if there are no beepers present at the corner
@@ -19,7 +18,7 @@ bool no_beepers_present();
  * Checks, if there are no beepers in the bag
  * @return true, if there are no beepers, false otherwise
  */
-bool noBeepersInBag();
+bool no_beepers_in_bag();
 
 
 /**
@@ -61,7 +60,7 @@ bool right_is_blocked();
  * Checks, if Karel is not facing north
  * @return true, if yes, false otherwise
  */
-bool notFacingNorth();
+bool not_facing_north();
 
 
 /**

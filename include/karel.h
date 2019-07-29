@@ -5,7 +5,10 @@
 #include <stdbool.h>
 
 
-// loop() macro to replace for()
+/**
+ * Arithmetic cycle
+ * Macro loop() represents the arithmetic cycle. The parameter defines the number of loops.
+ */
 #define loop(COUNT) for(size_t __loop_cntr = 0; __loop_cntr < COUNT; __loop_cntr++)
 
 

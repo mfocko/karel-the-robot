@@ -21,15 +21,20 @@ include_directories(include ${CURSES_INCLUDE_DIR})
 # include_directories()
 
 # build targets
-add_library(karel STATIC src/karel.c src/superkarel.c src/internals.c)
-# add_library(superkarel STATIC src/superkarel.c src/internals.c)
-set_property(TARGET karel PROPERTY CXX_STANDARD 11)
-#set_property(TARGET superkarel PROPERTY CXX_STANDARD 11)
+# karel
+add_library(karel STATIC src/karel.c  src/internals.c)
+#set_property(TARGET karel PROPERTY CXX_STANDARD 11)
 target_link_libraries(karel ${CURSES_LIBRARIES})
-#target_link_libraries(superkarel ${CURSES_LIBRARIES} karel)
+
+# superkarel
+add_library(superkarel STATIC src/karel.c src/superkarel.c src/internals.c)
+#set_property(TARGET superkarel PROPERTY CXX_STANDARD 11)
+target_link_libraries(superkarel ${CURSES_LIBRARIES})
+
 
 # install library and header files to /usr/local/{lib,include}
 install(TARGETS karel DESTINATION lib)
+install(TARGETS superkarel DESTINATION lib)
 install(FILES "include/karel.h" DESTINATION include)
 install(FILES "include/superkarel.h" DESTINATION include)
 install(DIRECTORY "doc/" DESTINATION share/doc/libkarel USE_SOURCE_PERMISSIONS
