@@ -1,20 +1,32 @@
+#ifndef _INTERNALS_H
+#define _INTERNALS_H
+
 #include "karel.h"
 
-#ifndef _INTERNALS_H
-#define	_INTERNALS_H
-
-
 #define MULTIPLIER 1000
-#define MAX_WIDTH   30
-#define MAX_HEIGHT  30
+#define MAX_WIDTH  30
+#define MAX_HEIGHT 30
 
 // global variables (application context)
-extern int stepDelay;
-extern bool summary_mode;
-extern struct world world;
-extern struct robot karel;
+extern int _step_delay;
+extern struct summary _summary;
+extern struct world _world;
+extern struct robot _karel;
 
-enum block{
+
+/**
+ * Summary mode metadata
+ */
+struct summary {
+    bool is_active; // flag to check, if summary is active or not
+    char* type;     // type of summary (e.g. json)
+};
+
+
+/**
+ * Types of blocks
+ */
+enum block {
     CLEAR = 0,
     WALL = -1
 };
@@ -23,7 +35,7 @@ enum block{
 /**
  * World definition
  */
-struct world{
+struct world {
     int width, height;  // world's width and height
     int **data;         // world data definition
 };
@@ -32,7 +44,7 @@ struct world{
 /**
  * Available directions
  */
-enum direction{
+enum direction {
     EAST = 0,
     NORTH = 90,
     WEST = 180,
@@ -43,16 +55,19 @@ enum direction{
 /**
  * Robot definition
  */
-struct robot{
+struct robot {
     int x, y;       // position
     enum direction direction;   // direction
     int steps;      // nr. of steps
     int beepers;    // nr. of beepers in bag
-    bool isRunning; // robot's state
-    char lastCommand[10];   // last executed command
+    bool is_running; // robot's state
+    char *last_command;   // last executed command
 };
 
 
+/**
+ * Available colors
+ */
 enum Colors {
     RED_ON_BLACK = 1,
     YELLOW_ON_BLACK,
@@ -64,24 +79,39 @@ enum Colors {
  * Draws scene only
  * Draws only world, without karel and state info
  */
-void drawWorld(struct world world, struct robot karel);
+void _draw_world();
+
+/**
+ * Render the screen
+ * Renders the whole screen - with info panel and world together.
+ */
+void _render();
+
+void _update(int dx, int dy);
+
+void _error_shut_off(const char *format, ...);
 
 
-void render(struct world world, struct robot karel);
-void update(struct world world, struct robot karel, int dx, int dy);
-void errorShutOff(char* message);
-void initialize();
-void deinit();
+/**
+ * initilaize curses, and colors if possible
+ */
+void _initialize();
+
+void _deinit();
 
 /**
  * Exports data about world and karel
- * Export is useful in summary mode only. Summary mode can be enabled 
+ * Export is useful in summary mode only. Summary mode can be enabled
  * with environment variable LIBKAREL_SUMMARY_MODE with it's value "true".
- * @param struct world world data
- * @param struct robot robot karel
  */
-void export_data(struct world world, struct robot karel);
+void _export_data();
 
 
-#endif	/* _INTERNALS_H */
+/**
+ * Checks if Karel is turned on and quits program, if not
+ * Private function.
+ */
+void _check_karel_state();
+
+#endif    /* _INTERNALS_H */
 

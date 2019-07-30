@@ -1,28 +1,31 @@
 #ifndef _KAREL_H
-#define	_KAREL_H
+#define _KAREL_H
 
 #include <stdio.h>
 #include <stdbool.h>
 
 
-// loop() macro to replace for()
+/**
+ * Arithmetic cycle
+ * Macro loop() represents the arithmetic cycle. The parameter defines the number of loops.
+ */
 #define loop(COUNT) for(size_t __loop_cntr = 0; __loop_cntr < COUNT; __loop_cntr++)
 
 
-// *************************************** Primitives 
+// *************************************** Primitives
 
 /**
  * Moves Karel one step forward
- * If there is wall or Karel is at the border of the world, he will be turned 
+ * If there is wall or Karel is at the border of the world, he will be turned
  * off automatically.
  */
-void movek();
+void step();
 
 
 /**
  * Turns Karel 90 degrees left
  */
-void turnLeft();
+void turn_left();
 
 
 /**
@@ -31,25 +34,25 @@ void turnLeft();
  * the file doesn't exist, program will be terminated with error message.
  * @param path location of the world file
  */
-void turnOn(char* path);
+void turn_on(const char *path);
 
 
 /**
- * Terminates  Karel's program
+ * Terminates Karel's program
  */
-void turnOff();
+void turn_off();
 
 
 /**
  * Puts beeper at the current world position, if Karol has some
  */
-void putBeeper();
+void put_beeper();
 
 
 /**
  * Picks beeper from current position if there is any and puts it to Karol's bag
  */
-void pickBeeper();
+void pick_beeper();
 
 
 // *************************************** Sensors
@@ -58,126 +61,28 @@ void pickBeeper();
  * Checks, if there are beepers present at the corner
  * @return true, if there are beepers, false otherwise
  */
-bool beepersPresent();
-
-
-/**
- * Checks, if there are no beepers present at the corner
- * @return true, if there are no beepers, false otherwise
- */
-bool noBeepersPresent();
+bool beepers_present();
 
 
 /**
  * Checks, if there are any beepers in the bag
  * @return true, if there are some, false otherwise
  */
-bool beepersInBag();
-
-
-/**
- * Checks, if there are no beepers in the bag
- * @return true, if there are no beepers, false otherwise
- */
-bool noBeepersInBag();
+bool beepers_in_bag();
 
 
 /**
  * Checks, if front of Karel is clear to go
  * @return true, if clear, false otherwise
  */
-bool frontIsClear();
-
-
-/**
- * Checks, if the front of Karel is not clear to go
- * @return true if it is not clear, false otherwise
- */
-bool frontIsBlocked();
-
-
-/**
- * Checks, if the corner on the left side of Karel is clear to go
- * @return true if it is clear, false otherwise
- */
-bool leftIsClear();
-
-
-/**
- * Checks, if the corner on the left side of Karel is not clear to go
- * @return true if it is not clear, false otherwise
- */
-bool leftIsBlocked();
-
-
-/**
- * Checks, if the corner on the right side of Karel is clear to go
- * @return true if it is clear, false otherwise
- */
-bool rightIsClear();
-
-
-/**
- * Checks, if the corner on the right side of Karel is not clear to go
- * @return true if it is not clear, false otherwise
- */
-bool rightIsBlocked();
+bool front_is_clear();
 
 
 /**
  * Checks, if Karel is facing north
  * @return true, if yes, false otherwise
  */
-bool facingNorth();
-
-
-/**
- * Checks, if Karel is not facing north
- * @return true, if yes, false otherwise
- */
-bool notFacingNorth();
-
-
-/**
- * Checks, if Karel is facing east
- * @return true, if yes, false otherwise
- */
-bool facingEast();
-
-
-/**
- * Checks, if Karel is not facing east
- * @return true, if yes, false otherwise
- */
-bool notFacingEast();
-
-
-/**
- * Checks, if Karel is facing west
- * @return true, if yes, false otherwise
- */
-bool facingWest();
-
-
-/**
- * Checks, if Karel is not facing west
- * @return true, if yes, false otherwise
- */
-bool notFacingWest();
-
-
-/**
- * Checks, if Karel is facing south
- * @return true, if yes, false otherwise
- */
-bool facingSouth();
-
-
-/**
- * Checks, if Karel is not facing south
- * @return true, if yes, false otherwise
- */
-bool notFacingSouth();
+bool facing_north();
 
 
 // *************************************** Functions
@@ -186,13 +91,6 @@ bool notFacingSouth();
  * Sets the delay of one step
  * @param delay the delay in millis
  */
-void setStepDelay(int delay);
+void set_step_delay(int delay);
 
-
-/**
- * Returns the current value of Karel's step delay
- * @return the step delay value in millis
- */
-int getStepDelay();
-
-#endif	/* _KAREL_H */
+#endif    /* _KAREL_H */
