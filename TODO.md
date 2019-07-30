@@ -10,18 +10,33 @@
 -   SDL support for GUI
     -   more interesting ;)
 
+
 ### `_error_shut_off()` update
 
 * make it with variable length arguments
     * as the `printf()`
 * use it always for shut off. not only when Karel is initialized and runnig (in GUI mode)
 
+
+### Support for CI
+
+* make the tests pass first before delivery/deployment
+
+
+### Environment variable for world file
+
+* don't need to recompile every time, when the same algorithm is used for different world
+* benefit for testing purposes
+
+
 ## Done
+
 
 ### Internationalization
 
 -   gettext support for error messages
 -   done in 2019.1
+
 
 ### Karel and Super Karel
 
