@@ -3,62 +3,41 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
-
 #include <libintl.h>
-#include <locale.h>
 
 #define _(STRING) gettext(STRING)
 
-#include "karel.h"
 #include "internals.h"
 
 
+// *************************************** Basic Karel's Sensors
 
-/**
- * Checks if Karel is turned on and quits program, if not
- * Private function.
- */
-void checkKarelState(){
-     if(!karel.isRunning){
-        errorShutOff(_("Karel is not turned On"));
-     }
+bool beepers_in_bag() {
+    _check_karel_state();
+    return _karel.beepers > 0;
 }
 
+bool front_is_clear() {
+    _check_karel_state();
 
-// *************************************** Sensors
-
-bool beepersInBag(){
-    checkKarelState();
-    return karel.beepers > 0;
-}
-
-
-bool noBeepersInBag(){
-    return !beepersInBag();
-}
-
-
-bool frontIsClear(){
-    checkKarelState();
-
-    switch(karel.direction){
+    switch (_karel.direction) {
         case NORTH    :
-            if(karel.y+1 >= world.height || world.data[karel.y+1][karel.x] == WALL){
+            if (_karel.y + 1 >= _world.height || _world.data[_karel.y + 1][_karel.x] == WALL) {
                 return false;
             }
             break;
         case SOUTH    :
-            if(karel.y-1 < 1 || world.data[karel.y-1][karel.x] == WALL){
+            if (_karel.y - 1 < 1 || _world.data[_karel.y - 1][_karel.x] == WALL) {
                 return false;
             }
             break;
         case WEST    :
-            if(karel.x-1 < 1 || world.data[karel.y][karel.x-1] == WALL){
+            if (_karel.x - 1 < 1 || _world.data[_karel.y][_karel.x - 1] == WALL) {
                 return false;
             }
             break;
         case EAST    :
-            if(karel.x+1 >= world.width || world.data[karel.y][karel.x+1] == WALL){
+            if (_karel.x + 1 >= _world.width || _world.data[_karel.y][_karel.x + 1] == WALL) {
                 return false;
             }
             break;
@@ -68,313 +47,263 @@ bool frontIsClear(){
 }
 
 
-bool frontIsBlocked(){
-    return !frontIsClear();
+bool facing_north() {
+    _check_karel_state();
+    return _karel.direction == NORTH;
 }
 
 
-bool leftIsClear(){
-    checkKarelState();
-
-    enum direction originalDirection = karel.direction;
-    karel.direction += 90;
-    if((int)karel.direction > 270){
-        karel.direction = EAST;
-    }
-
-    bool isClear = frontIsClear();
-    karel.direction = originalDirection;
-
-    return isClear;
+bool beepers_present() {
+    _check_karel_state();
+    return _world.data[_karel.y][_karel.x] > 0;
 }
 
 
-bool leftIsBlocked(){
-    return !leftIsClear();
-}
+// *************************************** Basic Karel's Primitives
 
+void step() {
+    _check_karel_state();
 
-bool rightIsClear(){
-    checkKarelState();
-
-    enum direction originalDirection = karel.direction;
-    karel.direction -= 90;
-    if((int)karel.direction < 0){
-        karel.direction = SOUTH;
-    }
-
-    bool isClear = frontIsClear();
-    karel.direction = originalDirection;
-
-    return isClear;
-}
-
-
-bool rightIsBlocked(){
-    return !rightIsClear();
-}
-
-
-bool facingNorth(){
-    checkKarelState();
-    return karel.direction == NORTH;
-}
-
-
-bool notFacingNorth(){
-    return !facingNorth();
-}
-
-
-bool facingSouth(){
-    checkKarelState();
-    return karel.direction == SOUTH;
-}
-
-
-bool notFacingSouth(){
-    return !facingSouth();
-}
-
-
-bool facingEast(){
-    checkKarelState();
-    return karel.direction == EAST;
-}
-
-
-bool notFacingEast(){
-    return !facingEast();
-}
-
-
-bool facingWest(){
-    checkKarelState();
-    return karel.direction == WEST;
-}
-
-
-bool notFacingWest(){
-    return !facingWest();
-}
-
-
-bool beepersPresent(){
-    checkKarelState();
-    return world.data[karel.y][karel.x] > 0;
-}
-
-
-bool noBeepersPresent(){
-    return !beepersPresent();
-}
-
-
-// *************************************** Primitives 
-
-void movek(){
-    checkKarelState();
-
-    if(frontIsClear()){
-        switch(karel.direction){
-            case NORTH  : karel.y+=2; update(world, karel, 0, 1); break;
-            case SOUTH  : karel.y-=2; update(world, karel, 0, -1); break;
-            case WEST   : karel.x-=2; update(world, karel, -1, 0); break;
-            case EAST   : karel.x+=2; update(world, karel, 1, 0); break;
+    if (front_is_clear()) {
+        switch (_karel.direction) {
+            case NORTH  :
+                _karel.y += 2;
+                _update(0, 1);
+                break;
+            case SOUTH  :
+                _karel.y -= 2;
+                _update(0, -1);
+                break;
+            case WEST   :
+                _karel.x -= 2;
+                _update(-1, 0);
+                break;
+            case EAST   :
+                _karel.x += 2;
+                _update(1, 0);
+                break;
         }
 
-        karel.steps++;
-        karel.lastCommand = _("MOVE");
-        render(world, karel);
-    }else
-        errorShutOff(_("Can't move this way"));
+        _karel.steps++;
+        _karel.last_command = _("STEP");
+        _render();
+    } else
+        _error_shut_off(_("Can't move this way"));
 }
 
 
-void turnLeft(){
-    checkKarelState();
+void turn_left() {
+    _check_karel_state();
 
-    karel.direction += 90;
-    if(karel.direction > 270){
-        karel.direction = EAST;
+    _karel.direction += 90;
+    if (_karel.direction > 270) {
+        _karel.direction = EAST;
     }
-    karel.steps++;
-    karel.lastCommand = _("TURN LEFT");
-    
-    update(world,karel,0,0);
-    render(world, karel);
+    _karel.steps++;
+    _karel.last_command = _("TURN LEFT");
+
+    _update(0, 0);
+    _render();
 }
 
 
-void turnOff(){
-    karel.lastCommand = _("TURN OFF");
-    render(world, karel);
-    deinit();
+void turn_off() {
+    _karel.last_command = _("TURN OFF");
+    _render();
+    _deinit();
 
     // if summary, then export data
-    if(summary_mode){
-        export_data(world, karel);
+    if (_summary.is_active) {
+        _export_data();
     }
-    
+
     // free memory
-    for(size_t y = 0; y < world.height; y++){
-        free(world.data[y]);
+    for (size_t y = 0; y < _world.height; y++) {
+        free(_world.data[y]);
     }
-    free(world.data);
+    free(_world.data);
 
     // credits
-    if(!summary_mode){
-        printf("Created by miroslav.binas@tuke.sk (c)2010, 2016, 2018\n");
+    if (!_summary.is_active) {
+        printf(_("Created by miroslav.binas@tuke.sk (c)2010, 2016, 2018-2019\n"));
     }
 
     exit(EXIT_SUCCESS);
 }
 
 
-void turnOn(char* path){
-    int row, column, count;
-    char direction, block, orientation;
+void turn_on(const char *path) {
+    // check, if we are running summary mode
+    char *mode = getenv("LIBKAREL_SUMMARY_MODE");
+    if (mode && strcmp(mode, "true") == 0) {
+        _summary.is_active = true;
+
+        // check the type of summary mode
+        char* type = getenv("LIBKAREL_SUMMARY_MODE_TYPE");
+        if(type && strcmp(type, "json") == 0){
+            _summary.type = type;
+        }
+    }
 
     // open file and read the world params
     FILE *fp = fopen(path, "r");
-    if(fp == NULL){
+    if (fp == NULL) {
         fprintf(stderr, _("Error: World file '%s' not found.\n"), path);
         exit(EXIT_FAILURE);
     }
 
-    if(fscanf(fp, "%d %d %d %d %c %d\n",
-            &world.width, &world.height, &karel.x, &karel.y, &direction,
-            &karel.beepers) != 6){
-        fprintf(stderr, _("Error: The world informations are not in correct format!\n"));
+    int row, column, count;
+    char direction, block, orientation;
+
+    if (fscanf(fp, "%d %d %d %d %c %d\n",
+               &_world.width, &_world.height, &_karel.x, &_karel.y, &direction, &_karel.beepers) != 6) {
+        fprintf(stderr, _("Error: The world information are not in correct format!\n"));
         exit(EXIT_FAILURE);
     }
 
     // world correction
-    world.width = world.width*2-1;
-    world.height = world.height*2-1;
+    _world.width = _world.width * 2 - 1;
+    _world.height = _world.height * 2 - 1;
 
     // karel position correction
-    karel.x = karel.x * 2 - 2;
-    karel.y = karel.y * 2 - 2;
+    _karel.x = _karel.x * 2 - 2;
+    _karel.y = _karel.y * 2 - 2;
 
     // check the world dimensions
-    if(world.width > MAX_WIDTH || world.width < 1){
-        fprintf(stderr, 
-                _("Error: The world's width is outside the range [1, %d]!\n"), 
+    if (_world.width > MAX_WIDTH || _world.width < 1) {
+        fprintf(stderr,
+                _("Error: The world's width is outside the range [1, %d]!\n"),
                 MAX_WIDTH);
         exit(EXIT_FAILURE);
     }
-    
-    if(world.height > MAX_HEIGHT || world.height < 1){
-        fprintf(stderr, 
-                _("Error: The world's height is outside the range [1, %d]!\n"), 
+
+    if (_world.height > MAX_HEIGHT || _world.height < 1) {
+        fprintf(stderr,
+                _("Error: The world's height is outside the range [1, %d]!\n"),
                 MAX_HEIGHT);
         exit(EXIT_FAILURE);
     }
 
     // format the direction
-    switch(toupper(direction)){
-        case 'S'    : karel.direction = SOUTH; break;
-        case 'W'    : karel.direction = WEST; break;
-        case 'E'    : karel.direction = EAST; break;
-        case 'N'    : karel.direction = NORTH; break;
-        default     : fprintf(stderr, _("Error: Uknown Karel's direction\n"));
-                      exit(EXIT_FAILURE);
+    switch (toupper(direction)) {
+        case 'S'    :
+            _karel.direction = SOUTH;
+            break;
+        case 'W'    :
+            _karel.direction = WEST;
+            break;
+        case 'E'    :
+            _karel.direction = EAST;
+            break;
+        case 'N'    :
+            _karel.direction = NORTH;
+            break;
+        default     :
+            fprintf(stderr, _("Error: Uknown Karel's direction\n"));
+            exit(EXIT_FAILURE);
     }
-    
+
     // create empty world
-    world.data = (int**)calloc(world.height, sizeof(int*));
-    for(size_t y = 0; y < world.height; y++){
-        world.data[y] = (int*)calloc(world.width, sizeof(int));
+    _world.data = (int **) calloc(_world.height, sizeof(int *));
+    for (size_t y = 0; y < _world.height; y++) {
+        _world.data[y] = (int *) calloc(_world.width, sizeof(int));
     }
 
     // load the map description
     int line = 2;
-    while(fscanf(fp, "%c", &block) != EOF){
+    while (fscanf(fp, "%c", &block) != EOF) {
 
-        switch(toupper(block)){
-            case 'W':   {
+        switch (toupper(block)) {
+            case 'W': {
                 int column2, row2;
 
                 // read the data
-                if(fscanf(fp, "%d %d %c\n", &column, &row, &orientation) != 3){
+                if (fscanf(fp, "%d %d %c\n", &column, &row, &orientation) != 3) {
                     fprintf(stderr, _("Error: Line %d: Incorrect format.\n"), line);
                     exit(EXIT_FAILURE);
                 }
 
                 // check correct position
-                if(column > world.width || row > world.height){
-                    fprintf(stderr, 
-                            _("Error: Line %d: Wall position is outside the world!\n"), 
-                            line);
+                if (column > _world.width || row > _world.height) {
+                    fprintf(stderr, _("Error: Line %d: Wall position is outside the world!\n"), line);
                     exit(EXIT_FAILURE);
                 }
 
-                column2 = column*2-2;
-                row2 = row*2-2;
+                column2 = column * 2 - 2;
+                row2 = row * 2 - 2;
 
                 // check, if the wall is correctly positioned
-                if(column2 % 2 == 1 || row2 % 2 == 1){
+                if (column2 % 2 == 1 || row2 % 2 == 1) {
                     fprintf(stderr, _("Error: Wrong position.\n"));
                     exit(EXIT_FAILURE);
                 }
 
                 // set walls
-                switch(toupper(orientation)){
-                    case 'E':   column2++; break;
-                    case 'W':   column2--; break;
-                    case 'N':   row2++; break;
-                    case 'S':   row2--; break;
-                    default :   fprintf(stderr, 
-                                        _("Error: Uknown wall orientation '%c'"
-                                            " on line %d in world file.\n"), 
-                                        orientation, line);
-                                exit(EXIT_FAILURE);
+                switch (toupper(orientation)) {
+                    case 'E':
+                        column2++;
+                        break;
+                    case 'W':
+                        column2--;
+                        break;
+                    case 'N':
+                        row2++;
+                        break;
+                    case 'S':
+                        row2--;
+                        break;
+                    default :
+                        fprintf(stderr,
+                                _("Error: Uknown wall orientation '%c'"
+                                  " on line %d in world file.\n"),
+                                orientation, line);
+                        exit(EXIT_FAILURE);
                 }
 
-                world.data[row2][column2] = WALL;
+                _world.data[row2][column2] = WALL;
 
                 // set vertical line
-                if(column2 % 2 == 1 && row2 % 2 == 0){
-                    if(row2 + 1 < world.height){
-                        world.data[row2+1][column2] = WALL;
+                if (column2 % 2 == 1 && row2 % 2 == 0) {
+                    if (row2 + 1 < _world.height) {
+                        _world.data[row2 + 1][column2] = WALL;
                     }
-                    if(row2 - 1 >= 0){
-                        world.data[row2-1][column2] = WALL;
+                    if (row2 - 1 >= 0) {
+                        _world.data[row2 - 1][column2] = WALL;
                     }
-                }else{
+                } else {
                     // set horizontal line
-                    if(column2 + 1 < world.width){
-                        world.data[row2][column2+1] = WALL;
+                    if (column2 + 1 < _world.width) {
+                        _world.data[row2][column2 + 1] = WALL;
                     }
-                    if(column2 - 1 >= 0){
-                        world.data[row2][column2-1] = WALL;
+                    if (column2 - 1 >= 0) {
+                        _world.data[row2][column2 - 1] = WALL;
                     }
                 }
                 break;
             }
 
-            case 'B':   {
-                if(fscanf(fp, "%d %d %d\n", &column, &row, &count) != 3){
+            case 'B': {
+                if (fscanf(fp, "%d %d %d\n", &column, &row, &count) != 3) {
                     fprintf(stderr, _("Error: Line %d: Incorrect format.\n"), line);
                     exit(EXIT_FAILURE);
                 }
 
                 // check correct position
-                if(column > world.width || row > world.height){
-                    fprintf(stderr, 
-                            _("Error: Line %d: Beeper position is outside the world!\n"), 
+                if (column > _world.width || row > _world.height) {
+                    fprintf(stderr,
+                            _("Error: Line %d: Beeper position is outside the world!\n"),
                             line);
                     exit(EXIT_FAILURE);
                 }
 
-                world.data[row*2-2][column*2-2] = count;
+                _world.data[row * 2 - 2][column * 2 - 2] = count;
                 break;
             }
 
-            default :   fprintf(stderr, _("Error: Unknown block character %c "
-                                "on line %d in world file.\n"), block, line);
-                        exit(EXIT_FAILURE);
+            default :
+                fprintf(stderr, _("Error: Unknown block character %c "
+                                  "on line %d in world file.\n"), block, line);
+                exit(EXIT_FAILURE);
         }
 
         line++;
@@ -383,60 +312,48 @@ void turnOn(char* path){
     // close the file and draw the scene
     fclose(fp);
 
-    // check, if we are running summary mode
-    char* mode = getenv("LIBKAREL_SUMMARY_MODE");
-    if(mode && strcmp(mode, "true") == 0){
-        summary_mode = true;
-    }
-
     // final initialization
-    initialize();
-    karel.lastCommand = _("TURN ON");
-    drawWorld(world, karel);
-    render(world, karel);
+    _initialize();
+    _karel.last_command = _("TURN ON");
+    _draw_world();
+    _render();
 
-    karel.isRunning = true;
+    _karel.is_running = true;
 }
 
 
-void putBeeper(){
-    checkKarelState();
+void put_beeper() {
+    _check_karel_state();
 
-    if(karel.beepers > 0){
-        world.data[karel.y][karel.x]++;
-        karel.beepers--;
-        karel.steps++;
-        karel.lastCommand = _("PUT BEEPER");
-        render(world, karel);
-    }else{
-        errorShutOff(_("Karel has no beeper to put at the corner"));
+    if (_karel.beepers > 0) {
+        _world.data[_karel.y][_karel.x]++;
+        _karel.beepers--;
+        _karel.steps++;
+        _karel.last_command = _("PUT BEEPER");
+        _render();
+    } else {
+        _error_shut_off(_("Karel has no beeper to put at the corner"));
     }
 }
 
 
-void pickBeeper(){
-    checkKarelState();
+void pick_beeper() {
+    _check_karel_state();
 
-    if(world.data[karel.y][karel.x] > 0){
-        world.data[karel.y][karel.x]--;
-        karel.beepers++;
-        karel.steps++;
-        karel.lastCommand = _("PICK BEEPER");
-        render(world, karel);
-    }else{
-        errorShutOff(_("There is no beeper at the corner"));
+    if (_world.data[_karel.y][_karel.x] > 0) {
+        _world.data[_karel.y][_karel.x]--;
+        _karel.beepers++;
+        _karel.steps++;
+        _karel.last_command = _("PICK BEEPER");
+        _render();
+    } else {
+        _error_shut_off(_("There is no beeper at the corner"));
     }
 }
+
 
 // *************************************** Functions
-
-
-
-void setStepDelay(int delay){
-    stepDelay = delay * MULTIPLIER;
+void set_step_delay(int delay) {
+    _step_delay = delay * MULTIPLIER;
 }
 
-
-int getStepDelay(){
-    return stepDelay;
-}
