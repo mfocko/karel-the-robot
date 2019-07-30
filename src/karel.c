@@ -146,10 +146,13 @@ void turn_on(const char *path) {
     }
 
     // open file and read the world params
-    FILE *fp = fopen(path, "r");
-    if (fp == NULL) {
-        fprintf(stderr, _("Error: World file '%s' not found.\n"), path);
-        exit(EXIT_FAILURE);
+    FILE *fp = stdin;
+    if(path != NULL){
+        fp = fopen(path, "r");
+        if (fp == NULL) {
+            fprintf(stderr, _("Error: World file '%s' not found.\n"), path);
+            exit(EXIT_FAILURE);
+        }
     }
 
     int row, column, count;

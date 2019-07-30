@@ -31,8 +31,9 @@ void turn_left();
 /**
  * Initializes the world of Karel the Robot
  * Function has one parameter, which defines the location of world file. If
- * the file doesn't exist, program will be terminated with error message.
- * @param path location of the world file
+ * the file doesn't exist, program will be terminated with error message. If
+ * NULL is given instead of path, then input file is read from standard input.
+ * @param path location of the world file or NULL if world file will be entered from stdin
  */
 void turn_on(const char *path);
 

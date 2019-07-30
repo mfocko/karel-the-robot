@@ -19,7 +19,7 @@ msgstr ""
 
 #: karel.c:192
 msgid "Can't move this way"
-msgstr ""
+msgstr "Tymto smerom sa neda ist"
 
 #: internals.c:203
 msgid "EAST"
@@ -91,7 +91,7 @@ msgstr ""
 
 #: karel.c:23
 msgid "Karel is not turned On"
-msgstr "Karel nie je zapnutý"
+msgstr "Karel nie je zapnuty"
 
 #: karel.c:189
 msgid "STEP"
@@ -103,15 +103,15 @@ msgstr "SEVER"
 
 #: karel.c:426
 msgid "PICK BEEPER"
-msgstr "VEZMI ZNAČKU"
+msgstr "VEZMI ZNACKU"
 
 #: karel.c:411
 msgid "PUT BEEPER"
-msgstr "POLOŽ ZNAČKU"
+msgstr "POLOZ ZNACKU"
 
 #: internals.c:286
 msgid "Press any key to quit..."
-msgstr ""
+msgstr "Program ukoncite stlacenim lubovolnej klavesy..."
 
 #: internals.c:201
 msgid "SOUTH"
@@ -119,15 +119,15 @@ msgstr "JUH"
 
 #: karel.c:204
 msgid "TURN LEFT"
-msgstr ""
+msgstr "VLAVO VBOK"
 
 #: karel.c:212
 msgid "TURN OFF"
-msgstr "VYPNÚŤ"
+msgstr "VYPNUT"
 
 #: karel.c:396
 msgid "TURN ON"
-msgstr "ZAPNÚŤ"
+msgstr "ZAPNUT"
 
 #: karel.c:429
 msgid "There is no beeper at the corner"
@@ -139,4 +139,4 @@ msgstr ""
 
 #: internals.c:202
 msgid "WEST"
-msgstr "ZÁPAD"
+msgstr "ZAPAD"

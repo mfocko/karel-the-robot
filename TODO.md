@@ -1,6 +1,8 @@
 # TODO
 
-## NCurses alternatives
+## Todo
+
+### NCurses alternatives
 
 -   move from ncurses to s-lang
     -   avoid usage of movek() function for Karel's movement because of ncurses move() function
@@ -8,11 +10,35 @@
 -   SDL support for GUI
     -   more interesting ;)
 
-## Internationalization
+
+### `_error_shut_off()` update
+
+* make it with variable length arguments
+    * as the `printf()`
+* use it always for shut off. not only when Karel is initialized and runnig (in GUI mode)
+
+
+### Support for CI
+
+* make the tests pass first before delivery/deployment
+
+
+### Environment variable for world file
+
+* don't need to recompile every time, when the same algorithm is used for different world
+* benefit for testing purposes
+
+
+## Done
+
+
+### Internationalization
 
 -   gettext support for error messages
+-   done in 2019.1
 
-## Karel and Super Karel
+
+### Karel and Super Karel
 
 - karel should contain only the basic vocabulary:
 
@@ -33,7 +59,10 @@
 -   super karel extension
     -   "batteries included" Karel
 
+- done in 2019.1
 
-## Naming Conventions
+
+### Naming Conventions
 
 * rewrite from Java/C++ style to C style
+* done in 2019.1
