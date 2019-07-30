@@ -1,11 +1,9 @@
 #include <stdbool.h>
 
-#include <libintl.h>
-
-#define _(STRING) gettext(STRING)
-
 #include "superkarel.h"
 #include "internals.h"
+
+#define _(STRING) gettext(STRING)
 
 
 bool no_beepers_in_bag() {
@@ -21,16 +19,16 @@ bool front_is_blocked() {
 bool left_is_clear() {
     _check_karel_state();
 
-    enum direction originalDirection = karel.direction;
-    karel.direction += 90;
-    if ((int) karel.direction > 270) {
-        karel.direction = EAST;
+    enum direction original_direction = _karel.direction;
+    _karel.direction += 90;
+    if ((int) _karel.direction > 270) {
+        _karel.direction = EAST;
     }
 
-    bool isClear = front_is_clear();
-    karel.direction = originalDirection;
+    bool is_clear = front_is_clear();
+    _karel.direction = original_direction;
 
-    return isClear;
+    return is_clear;
 }
 
 
@@ -42,16 +40,16 @@ bool left_is_blocked() {
 bool right_is_clear() {
     _check_karel_state();
 
-    enum direction originalDirection = karel.direction;
-    karel.direction -= 90;
-    if ((int) karel.direction < 0) {
-        karel.direction = SOUTH;
+    enum direction original_direction = _karel.direction;
+    _karel.direction -= 90;
+    if ((int) _karel.direction < 0) {
+        _karel.direction = SOUTH;
     }
 
-    bool isClear = front_is_clear();
-    karel.direction = originalDirection;
+    bool is_clear = front_is_clear();
+    _karel.direction = original_direction;
 
-    return isClear;
+    return is_clear;
 }
 
 
@@ -67,7 +65,7 @@ bool not_facing_north() {
 
 bool facing_south() {
     _check_karel_state();
-    return karel.direction == SOUTH;
+    return _karel.direction == SOUTH;
 }
 
 
@@ -78,7 +76,7 @@ bool not_facing_south() {
 
 bool facing_east() {
     _check_karel_state();
-    return karel.direction == EAST;
+    return _karel.direction == EAST;
 }
 
 
@@ -89,7 +87,7 @@ bool not_facing_east() {
 
 bool facing_west() {
     _check_karel_state();
-    return karel.direction == WEST;
+    return _karel.direction == WEST;
 }
 
 

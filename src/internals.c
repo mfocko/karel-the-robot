@@ -14,11 +14,11 @@
 
 
 // global variables (application context)
-int step_delay = 700 * MULTIPLIER;
+int _step_delay = 700 * MULTIPLIER;
 
-struct world world;
+struct world _world;
 
-struct robot karel; //=  {
+struct robot _karel; //=  {
 //    0,0,     // position
 //    EAST,   // direction
 //    0,      // steps
@@ -27,14 +27,14 @@ struct robot karel; //=  {
 //    "none"  // last command
 //};
 
-struct summary summary = {
+struct summary _summary = {
     false,  // not active
     NULL    // type
 };
 
 
 void _print_beeper(int nr){
-    if(summary.is_active == true){
+    if(_summary.is_active == true){
         return;
     }
 
@@ -51,19 +51,19 @@ void _print_beeper(int nr){
 
 
 void _draw_world(){
-    if(summary.is_active){
+    if(_summary.is_active){
         return;
     }
 
     // draw horizontal border line
     mvprintw(4, 0, "ST.+");
-    for(int column = 0; column <= world.width * 2; column++){
+    for(int column = 0; column <= _world.width * 2; column++){
         printw("-");
     }
     printw("+\n");
 
     // draw world
-    for(int row = world.height - 1; row >= 0; row--){
+    for(int row = _world.height - 1; row >= 0; row--){
         if(row % 2 == 0){
             printw("%2d |", row / 2 + 1);
         }else{
@@ -71,18 +71,18 @@ void _draw_world(){
         }
 
         // small indentation for first column
-        if(world.data[row][0] == WALL){
+        if(_world.data[row][0] == WALL){
             printw("-");
         }else{
             printw(" ");
         }
 
-        for(int column = 0; column < world.width; column++){
-            int block = world.data[row][column];
-            int left = column - 1 >= 0 ? world.data[row][column-1] : WALL;
-            int right = column + 1 < world.width ? world.data[row][column+1] : WALL;
-            int up = row + 1 < world.height ? world.data[row+1][column] : 0;
-            int down = row - 1 >= 0 ? world.data[row-1][column] : 0;
+        for(int column = 0; column < _world.width; column++){
+            int block = _world.data[row][column];
+            int left = column - 1 >= 0 ? _world.data[row][column-1] : WALL;
+            int right = column + 1 < _world.width ? _world.data[row][column+1] : WALL;
+            int up = row + 1 < _world.height ? _world.data[row+1][column] : 0;
+            int down = row - 1 >= 0 ? _world.data[row-1][column] : 0;
 
             // handle karel positions and beepers
             if(column % 2 == 0 && row % 2 == 0){ // karel can move on even positions
@@ -159,12 +159,12 @@ void _draw_world(){
 
     // draw footer
     printw("   +");
-    for(int column = 0; column <= world.width * 2; column++){
+    for(int column = 0; column <= _world.width * 2; column++){
         printw("-");
     }
     printw("+\n     ");
 
-    for(int column = 0; column < world.width; column++){
+    for(int column = 0; column < _world.width; column++){
         if(column % 2 == 0){
             printw("%-2d", column / 2 + 1);
         }else{
@@ -180,10 +180,10 @@ void _draw_world(){
 void _update(int dx, int dy){
     // update old position, if karel has moved
     if(!(dx == 0 && dy == 0)){
-        int block = world.data[karel.y - 2*dy][karel.x - 2*dx];
+        int block = _world.data[_karel.y - 2*dy][_karel.x - 2*dx];
 
-        if(!summary.is_active){
-            move(world.height - (karel.y - 2*dy) + 4, 2 * (karel.x - 2*dx) + 5);
+        if(!_summary.is_active){
+            move(_world.height - (_karel.y - 2*dy) + 4, 2 * (_karel.x - 2*dx) + 5);
             if(block > 0){
                 _print_beeper(block);
             }else{
@@ -195,13 +195,13 @@ void _update(int dx, int dy){
 
 
 void _render(){
-    if(summary.is_active == true){
+    if(_summary.is_active == true){
         return;
     }
 
     // get the string representation of current orientation
     char* direction;
-    switch(karel.direction){
+    switch(_karel.direction){
         case NORTH  : direction = _("NORTH"); break;
         case SOUTH  : direction = _("SOUTH"); break;
         case WEST   : direction = _("WEST"); break;
@@ -210,21 +210,21 @@ void _render(){
     }
 
     // draw header first
-    mvprintw(1, 0, " %-3d %s\n", karel.steps, karel.last_command);
+    mvprintw(1, 0, " %-3d %s\n", _karel.steps, _karel.last_command);
     printw(" CORNER  FACING  BEEP-BAG  BEEP-CORNER\n");
     printw(" (%d, %d)   %-5s     %2d        %2d\n",
-            (karel.x+2)/2, (karel.y+2)/2, direction, karel.beepers,
-            world.data[karel.y][karel.x]);
+            (_karel.x+2)/2, (_karel.y+2)/2, direction, _karel.beepers,
+            _world.data[_karel.y][_karel.x]);
 
     // set karel's new position
-    move(world.height - karel.y + 4, 2 * karel.x + 5);
+    move(_world.height - _karel.y + 4, 2 * _karel.x + 5);
 
     if(has_colors()){
         attron(COLOR_PAIR(YELLOW_ON_BLACK) | A_BOLD);
     }
 
     // draw karel
-    switch(karel.direction){
+    switch(_karel.direction){
         case NORTH  : printw("^ "); break;
         case SOUTH  : printw("v "); break;
         case EAST   : printw("> "); break;
@@ -236,12 +236,12 @@ void _render(){
     }
 
     refresh();
-    usleep(get_step_delay());
+    usleep(_step_delay);
 }
 
 
 void _error_shut_off(const char* format, ...){
-    if(!summary.is_active){
+    if(!_summary.is_active){
         if(has_colors()){
             attron(COLOR_PAIR(RED_ON_BLACK));
         }
@@ -260,7 +260,7 @@ void _error_shut_off(const char* format, ...){
 
 
 void _initialize(){
-    if(summary.is_active){
+    if(_summary.is_active){
         return;
     }
 
@@ -287,7 +287,7 @@ void _initialize(){
 
 
 void _deinit(){
-    if(summary.is_active){
+    if(_summary.is_active){
         return;
     }
 
@@ -304,7 +304,7 @@ void _deinit(){
 void _export_data(){
     // prepare direction
     char direction;
-    switch(karel.direction){
+    switch(_karel.direction){
         case EAST   : direction = 'E'; break;
         case NORTH  : direction = 'N'; break;
         case WEST   : direction = 'W'; break;
@@ -312,26 +312,26 @@ void _export_data(){
         default     : direction = ' '; break;
     }
 
-    if(summary.type && strcmp(summary.type, "json") == 0){
+    if(_summary.type && strcmp(_summary.type, "json") == 0){
         printf("{\n"
                 "\"x\": %d,\n"
                 "\"y\": %d,\n"
                 "\"direction\": \"%c\",\n"
                 "\"bag\": %d,\n"
                 "\"beepers\": [\n",
-                (karel.x+2)/2, (karel.y+2)/2, direction, karel.beepers);
+                (_karel.x+2)/2, (_karel.y+2)/2, direction, _karel.beepers);
 
         // export world
         bool any_beeper = false;
-        for(size_t row = 0; row < world.height/2+1; row++){
-            for(size_t col = 0; col < world.width/2+1; col++){
-                if(world.data[row][col] > 0){
+        for(size_t row = 0; row < _world.height/2+1; row++){
+            for(size_t col = 0; col < _world.width/2+1; col++){
+                if(_world.data[row][col] > 0){
                     if(any_beeper == false){
                         any_beeper = true;
                     }else{
                         printf(",\n");
                     }
-                    printf("    {\"x\": %zu, \"y\": %zu, \"count\": %d}", col, row, world.data[row][col]);
+                    printf("    {\"x\": %zu, \"y\": %zu, \"count\": %d}", col, row, _world.data[row][col]);
                 }
             }
         }
@@ -340,13 +340,13 @@ void _export_data(){
     }else{
         // header
         printf("%d %d %c %d\n",
-                (karel.x+2)/2, (karel.y+2)/2, direction, karel.beepers);
+                (_karel.x+2)/2, (_karel.y+2)/2, direction, _karel.beepers);
 
         // export world
-        for(size_t row = 0; row < world.height/2+1; row++){
-            for(size_t col = 0; col < world.width/2+1; col++){
-                if(world.data[row][col] > 0){
-                    printf("B %zu %zu %d\n", col, row, world.data[row][col]);
+        for(size_t row = 0; row < _world.height/2+1; row++){
+            for(size_t col = 0; col < _world.width/2+1; col++){
+                if(_world.data[row][col] > 0){
+                    printf("B %zu %zu %d\n", col, row, _world.data[row][col]);
                 }
             }
         }
@@ -355,7 +355,7 @@ void _export_data(){
 
 
 void _check_karel_state(){
-     if(!karel.is_running){
+     if(!_karel.is_running){
         _error_shut_off(_("Karel is not turned On"));
      }
 }

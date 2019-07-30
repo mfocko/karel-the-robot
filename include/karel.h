@@ -34,7 +34,7 @@ void turn_left();
  * the file doesn't exist, program will be terminated with error message.
  * @param path location of the world file
  */
-void turn_on(char *path);
+void turn_on(const char *path);
 
 
 /**
@@ -92,12 +92,5 @@ bool facing_north();
  * @param delay the delay in millis
  */
 void set_step_delay(int delay);
-
-
-/**
- * Returns the current value of Karel's step delay
- * @return the step delay value in millis
- */
-int get_step_delay();
 
 #endif    /* _KAREL_H */

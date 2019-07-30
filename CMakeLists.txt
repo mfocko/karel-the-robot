@@ -44,4 +44,4 @@ add_subdirectory(doc/examples)
 
 # tests
 #enable_testing()
-#add_subdirectory(tests)
+add_subdirectory(tests)

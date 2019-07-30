@@ -1,18 +1,17 @@
-#include "karel.h"
-
 #ifndef _INTERNALS_H
 #define _INTERNALS_H
 
+#include "karel.h"
 
 #define MULTIPLIER 1000
-#define MAX_WIDTH   30
-#define MAX_HEIGHT  30
+#define MAX_WIDTH  30
+#define MAX_HEIGHT 30
 
 // global variables (application context)
-extern int step_delay;
-extern struct summary summary;
-extern struct world world;
-extern struct robot karel;
+extern int _step_delay;
+extern struct summary _summary;
+extern struct world _world;
+extern struct robot _karel;
 
 
 /**
@@ -104,10 +103,8 @@ void _deinit();
  * Exports data about world and karel
  * Export is useful in summary mode only. Summary mode can be enabled
  * with environment variable LIBKAREL_SUMMARY_MODE with it's value "true".
- * @param struct world world data
- * @param struct robot robot karel
  */
-void _export_data(struct world world, struct robot karel);
+void _export_data();
 
 
 /**
@@ -115,7 +112,6 @@ void _export_data(struct world world, struct robot karel);
  * Private function.
  */
 void _check_karel_state();
-
 
 #endif    /* _INTERNALS_H */
 
