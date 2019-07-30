@@ -1,18 +1,17 @@
 This file contains:
 
-- Build requirements for Karel the robot
-- Installation instructions for Karel the robot
-- Where to get more information on Karel the robot
-- Notes about Karel the robot installation
+-   Build requirements for Karel the robot
+-   Installation instructions for Karel the robot
+-   Where to get more information on Karel the robot
+-   Notes about Karel the robot installation
 
 ## Build requirements for Karel the robot
 
-- gcc
-- cmake
-- make
-- ncurses (pdcurses if Windows)
-- gettext
-
+-   gcc
+-   cmake
+-   make
+-   ncurses (pdcurses if Windows)
+-   gettext
 
 ## Installation instructions for Karel the robot
 
@@ -28,17 +27,16 @@ To compile this package:
 
 5.  Type `make install` to install library and the documentation.
 
-6.  You can remove the compiled library and object files from the directory by typing `make clean`.  
-
+6.  You can remove the compiled library and object files from the directory by typing `make clean`.
 
 ## Notes about Karel the robot installation
 
 Karel the robot has been run in the following configurations:
 
-* amd64-*-linux
-* i386-*-linux
-* Windows XP
-* Windows Vista
-* Windows 7
+-   amd64-\*-linux
+-   i386-\*-linux
+-   Windows XP
+-   Windows Vista
+-   Windows 7
 
-You will need an ANSI C Compiler (such as GCC), libc library and ncurses library to compile the source.  
+You will need an ANSI C Compiler (such as GCC), libc library and ncurses library to compile the source.

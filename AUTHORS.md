@@ -8,3 +8,4 @@
 * Matej Focko
 * Janka Paračková
 * Ján Juhár
+* Emília Pietriková
