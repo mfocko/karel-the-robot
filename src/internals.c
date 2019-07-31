@@ -34,7 +34,7 @@ struct summary _summary = {
 
 
 void _print_beeper(int nr){
-    if(_summary.is_active == true){
+    if(_summary.is_active){
         return;
     }
 
@@ -177,9 +177,11 @@ void _draw_world(){
 }
 
 
+/**
+ * update old position, if karel has moved
+ */
 void _update(int dx, int dy){
-    // update old position, if karel has moved
-    if(!(dx == 0 && dy == 0)){
+    if(dx == 1 || dy == 1){
         int block = _world.data[_karel.y - 2*dy][_karel.x - 2*dx];
 
         if(!_summary.is_active){
