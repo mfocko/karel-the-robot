@@ -12,6 +12,8 @@ This file contains:
 -   make
 -   ncurses (pdcurses if Windows)
 -   gettext
+-   pkg-config
+-   check
 
 ## Installation instructions for Karel the robot
 
