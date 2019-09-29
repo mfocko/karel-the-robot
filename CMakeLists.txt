@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.9)
 # Set project
 project("Karel the Robot C Library" C)
 set(PROJECT_VERSION_MAJOR 2019)
-set(PROJECT_VERSION_MINOR 1)
+set(PROJECT_VERSION_MINOR 2)
 
 # for the Curses library to load
 find_package(Curses REQUIRED)

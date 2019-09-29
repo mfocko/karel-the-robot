@@ -9,6 +9,7 @@ void turn_right(){
 int main(){
     // turn on karel in the world stairs.kw
     turn_on("stairs.kw");
+    facing_east();
 
     // pick all beepers on all stairs
     loop(3){
