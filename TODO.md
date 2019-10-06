@@ -2,6 +2,13 @@
 
 ## Todo
 
+### Refactoring the Export
+
+* move `internals.c` to `core.c`
+* create module for exports only
+    * distinguish different export modes to at least separate functions (JSON, YAML, text, XML, ...)
+
+
 ### NCurses alternatives
 
 -   move from ncurses to s-lang
@@ -9,13 +16,6 @@
     -   or maybe termbox (but no support for windows :-( http://code.google.com/p/termbox/
 -   SDL support for GUI
     -   more interesting ;)
-
-
-### `_error_shut_off()` update
-
-* make it with variable length arguments
-    * as the `printf()`
-* use it always for shut off. not only when Karel is initialized and runnig (in GUI mode)
 
 
 ### Support for CI
@@ -30,6 +30,12 @@
 
 
 ## Done
+
+### `_error_shut_off()` update
+
+* make it with variable length arguments
+    * as the `printf()`
+* use it always for shut off. not only when Karel is initialized and runnig (in GUI mode)
 
 
 ### Internationalization

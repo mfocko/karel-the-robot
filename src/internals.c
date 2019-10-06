@@ -7,6 +7,7 @@
 #include <string.h>
 #include <signal.h>
 #include <libintl.h>
+#include <stdarg.h>
 
 #define _(STRING) gettext(STRING)
 
@@ -243,20 +244,38 @@ void _render(){
 
 
 void _error_shut_off(const char* format, ...){
-    if(!_summary.is_active){
+    va_list args;
+    va_start(args, format);
+
+    if(_karel.is_running && !_summary.is_active){
         if(has_colors()){
             attron(COLOR_PAIR(RED_ON_BLACK));
         }
 
-        mvprintw(0, 0, _("Error Shutoff! (%s)"), format);
+        // there is error message stored in the format
+        // no formatting is necessary
+        mvprintw(0, 0, _("Safety Shutdown: %s"), format);
 
         refresh();
         getchar();
         endwin();
+
+    }else if(_summary.is_active && strcmp(_summary.type, "json") == 0){
+        if(_karel.is_running){
+            _export_data(format, args);
+        }else{
+            printf("{\"error\": \"");
+            vprintf(format, args);
+            printf("\"}\n");
+        }
+
     }else{
-        fprintf(stderr, _("Error Shutoff! (%s)"), format);
+        fprintf(stderr, _("Error: "));
+        vfprintf(stderr, format, args);
+        fprintf(stderr, "\n");
     }
 
+    va_end(args);
     exit(EXIT_FAILURE);
 }
 
@@ -303,7 +322,7 @@ void _deinit(){
 }
 
 
-void _export_data(){
+void _export_data(const char* format, ...){
     // prepare direction
     char direction;
     switch(_karel.direction){
@@ -315,15 +334,18 @@ void _export_data(){
     }
 
     if(_summary.type && strcmp(_summary.type, "json") == 0){
-        printf("{\n"
-                "\"x\": %d,\n"
-                "\"y\": %d,\n"
-                "\"direction\": \"%c\",\n"
-                "\"bag\": %d,\n"
-                "\"beepers\": [\n",
+        // karel the robot
+        printf("{"
+                "\"karel\": {"
+                  "\"x\": %d,"
+                  "\"y\": %d,"
+                  "\"direction\": \"%c\","
+                  "\"bag\": %d"
+                "},"
+                "\"beepers\": [",
                 (_karel.x+2)/2, (_karel.y+2)/2, direction, _karel.beepers);
 
-        // export world
+        // export beepers from the world
         bool any_beeper = false;
         for(size_t row = 0; row < _world.height/2+1; row++){
             for(size_t col = 0; col < _world.width/2+1; col++){
@@ -331,14 +353,27 @@ void _export_data(){
                     if(any_beeper == false){
                         any_beeper = true;
                     }else{
-                        printf(",\n");
+                        printf(",");
                     }
-                    printf("    {\"x\": %zu, \"y\": %zu, \"count\": %d}", col, row, _world.data[row][col]);
+                    printf("{\"x\": %zu, \"y\": %zu, \"count\": %d}", col, row, _world.data[row][col]);
                 }
             }
         }
 
-        printf("\n]}");
+        // export also error message
+        if(format != NULL){
+            va_list args;
+            va_start(args, format);
+
+            printf(",");
+            printf("{\"error\": \"");
+            vprintf(format, args);
+            printf("\"}\n");
+
+            va_end(args);
+        }
+
+        printf("]}");
     }else{
         // header
         printf("%d %d %c %d\n",
