@@ -360,20 +360,22 @@ void _export_data(const char* format, ...){
             }
         }
 
+        printf("]");
+
         // export also error message
         if(format != NULL){
             va_list args;
             va_start(args, format);
 
             printf(",");
-            printf("{\"error\": \"");
+            printf("\"error\": \"");
             vprintf(format, args);
-            printf("\"}\n");
+            printf("\"");
 
             va_end(args);
         }
 
-        printf("]}");
+        printf("}\n");
     }else{
         // header
         printf("%d %d %c %d\n",
