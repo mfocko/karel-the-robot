@@ -182,7 +182,7 @@ void _draw_world(){
  * update old position, if karel has moved
  */
 void _update(int dx, int dy){
-    if(dx == 1 || dy == 1){
+    if(dx != 0 || dy != 0){
         int block = _world.data[_karel.y - 2*dy][_karel.x - 2*dx];
 
         if(!_summary.is_active){
@@ -198,7 +198,7 @@ void _update(int dx, int dy){
 
 
 void _render(){
-    if(_summary.is_active == true){
+    if(_summary.is_active){
         return;
     }
 
@@ -315,6 +315,7 @@ void _deinit(){
     if(has_colors()){
         attron(COLOR_PAIR(YELLOW_ON_BLACK));
     }
+
     mvprintw(0, 0, _("Press any key to quit..."));
     refresh();
     getchar();
@@ -347,15 +348,15 @@ void _export_data(const char* format, ...){
 
         // export beepers from the world
         bool any_beeper = false;
-        for(size_t row = 0; row < _world.height/2+1; row++){
-            for(size_t col = 0; col < _world.width/2+1; col++){
+        for(size_t row = 0; row < _world.height; row++){
+            for(size_t col = 0; col < _world.width; col++){
                 if(_world.data[row][col] > 0){
                     if(any_beeper == false){
                         any_beeper = true;
                     }else{
                         printf(",");
                     }
-                    printf("{\"x\": %zu, \"y\": %zu, \"count\": %d}", col, row, _world.data[row][col]);
+                    printf("{\"x\": %zu, \"y\": %zu, \"count\": %d}", col/2+1, row/2+1, _world.data[row][col]);
                 }
             }
         }
