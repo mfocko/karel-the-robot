@@ -9,7 +9,7 @@ void turn_right(){
 int main(){
     // turn on karel in the world stairs.kw
     turn_on("stairs.kw");
-/*
+
     // pick all beepers on all stairs
     loop(3){
         turn_left();
@@ -29,7 +29,7 @@ int main(){
     while(beepers_in_bag()){
         put_beeper();
     }
-*/
+
     // turn off
     turn_off();
 }

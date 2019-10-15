@@ -383,10 +383,10 @@ void _export_data(const char* format, ...){
                 (_karel.x+2)/2, (_karel.y+2)/2, direction, _karel.beepers);
 
         // export world
-        for(size_t row = 0; row < _world.height/2+1; row++){
-            for(size_t col = 0; col < _world.width/2+1; col++){
+        for(size_t row = 0; row < _world.height; row++){
+            for(size_t col = 0; col < _world.width; col++){
                 if(_world.data[row][col] > 0){
-                    printf("B %zu %zu %d\n", col, row, _world.data[row][col]);
+                    printf("B %zu %zu %d\n", col/2+1, row/2+1, _world.data[row][col]);
                 }
             }
         }
