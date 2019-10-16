@@ -87,8 +87,9 @@ void step() {
         _karel.steps++;
         _karel.last_command = _("STEP");
         _render();
-    } else
-        _error_shut_off(_("Can't move this way"));
+    } else {
+        _error_shut_off(_("Can't move this way."));
+    }
 }
 
 
@@ -114,7 +115,7 @@ void turn_off() {
 
     // if summary, then export data
     if (_summary.is_active) {
-        _export_data();
+        _export_data(NULL);
     }
 
     // free memory
@@ -150,8 +151,7 @@ void turn_on(const char *path) {
     if(path != NULL){
         fp = fopen(path, "r");
         if (fp == NULL) {
-            fprintf(stderr, _("Error: World file '%s' not found.\n"), path);
-            exit(EXIT_FAILURE);
+            _error_shut_off(_("World file '%s' not found."), path);
         }
     }
 
@@ -160,8 +160,7 @@ void turn_on(const char *path) {
 
     if (fscanf(fp, "%d %d %d %d %c %d\n",
                &_world.width, &_world.height, &_karel.x, &_karel.y, &direction, &_karel.beepers) != 6) {
-        fprintf(stderr, _("Error: The world information are not in correct format!\n"));
-        exit(EXIT_FAILURE);
+        _error_shut_off(_("The world information are not in correct format!"));
     }
 
     // world correction
@@ -174,17 +173,13 @@ void turn_on(const char *path) {
 
     // check the world dimensions
     if (_world.width > MAX_WIDTH || _world.width < 1) {
-        fprintf(stderr,
-                _("Error: The world's width is outside the range [1, %d]!\n"),
+        _error_shut_off(_("The world's width is outside the range [1, %d]!"),
                 MAX_WIDTH);
-        exit(EXIT_FAILURE);
     }
 
     if (_world.height > MAX_HEIGHT || _world.height < 1) {
-        fprintf(stderr,
-                _("Error: The world's height is outside the range [1, %d]!\n"),
+        _error_shut_off(_("The world's height is outside the range [1, %d]!"),
                 MAX_HEIGHT);
-        exit(EXIT_FAILURE);
     }
 
     // format the direction
@@ -202,8 +197,7 @@ void turn_on(const char *path) {
             _karel.direction = NORTH;
             break;
         default     :
-            fprintf(stderr, _("Error: Uknown Karel's direction\n"));
-            exit(EXIT_FAILURE);
+            _error_shut_off(_("Uknown Karel's direction."));
     }
 
     // create empty world
@@ -222,14 +216,12 @@ void turn_on(const char *path) {
 
                 // read the data
                 if (fscanf(fp, "%d %d %c\n", &column, &row, &orientation) != 3) {
-                    fprintf(stderr, _("Error: Line %d: Incorrect format.\n"), line);
-                    exit(EXIT_FAILURE);
+                    _error_shut_off(_("Line %d: Incorrect format."), line);
                 }
 
                 // check correct position
                 if (column > _world.width || row > _world.height) {
-                    fprintf(stderr, _("Error: Line %d: Wall position is outside the world!\n"), line);
-                    exit(EXIT_FAILURE);
+                    _error_shut_off(_("Line %d: Wall position is outside the world!"), line);
                 }
 
                 column2 = column * 2 - 2;
@@ -237,8 +229,7 @@ void turn_on(const char *path) {
 
                 // check, if the wall is correctly positioned
                 if (column2 % 2 == 1 || row2 % 2 == 1) {
-                    fprintf(stderr, _("Error: Wrong position.\n"));
-                    exit(EXIT_FAILURE);
+                    _error_shut_off(_("Wrong position."));
                 }
 
                 // set walls
@@ -256,11 +247,8 @@ void turn_on(const char *path) {
                         row2--;
                         break;
                     default :
-                        fprintf(stderr,
-                                _("Error: Uknown wall orientation '%c'"
-                                  " on line %d in world file.\n"),
-                                orientation, line);
-                        exit(EXIT_FAILURE);
+                        _error_shut_off(_("Uknown wall orientation '%c' on line"
+                                    " %d in world file."), orientation, line);
                 }
 
                 _world.data[row2][column2] = WALL;
@@ -287,16 +275,12 @@ void turn_on(const char *path) {
 
             case 'B': {
                 if (fscanf(fp, "%d %d %d\n", &column, &row, &count) != 3) {
-                    fprintf(stderr, _("Error: Line %d: Incorrect format.\n"), line);
-                    exit(EXIT_FAILURE);
+                    _error_shut_off(_("Line %d: Incorrect format."), line);
                 }
 
                 // check correct position
                 if (column > _world.width || row > _world.height) {
-                    fprintf(stderr,
-                            _("Error: Line %d: Beeper position is outside the world!\n"),
-                            line);
-                    exit(EXIT_FAILURE);
+                    _error_shut_off(_("Line %d: Beeper position is outside the world!"), line);
                 }
 
                 _world.data[row * 2 - 2][column * 2 - 2] = count;
@@ -304,9 +288,7 @@ void turn_on(const char *path) {
             }
 
             default :
-                fprintf(stderr, _("Error: Unknown block character %c "
-                                  "on line %d in world file.\n"), block, line);
-                exit(EXIT_FAILURE);
+                _error_shut_off(_("Unknown block character %c on line %d in world file."), block, line);
         }
 
         line++;
@@ -335,7 +317,7 @@ void put_beeper() {
         _karel.last_command = _("PUT BEEPER");
         _render();
     } else {
-        _error_shut_off(_("Karel has no beeper to put at the corner"));
+        _error_shut_off(_("Karel has no beeper to put at the corner."));
     }
 }
 
@@ -350,7 +332,7 @@ void pick_beeper() {
         _karel.last_command = _("PICK BEEPER");
         _render();
     } else {
-        _error_shut_off(_("There is no beeper at the corner"));
+        _error_shut_off(_("There is no beeper at the corner."));
     }
 }
 

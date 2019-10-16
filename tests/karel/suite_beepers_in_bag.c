@@ -24,8 +24,8 @@ START_TEST(when_one_beeper_is_in_bag_then_return_true)
     }
 END_TEST
 
-START_TEST(
-        when_beepers_gt_one_are_in_the_bag_then_return_true)
+
+START_TEST(when_beepers_gt_one_are_in_the_bag_then_return_true)
     {
         _karel.beepers = rand() % (RAND_MAX - 1);
         _karel.is_running = true;

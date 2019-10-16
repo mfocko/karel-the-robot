@@ -89,6 +89,23 @@ void _render();
 
 void _update(int dx, int dy);
 
+/**
+ * Exit Karel with error message
+ * Karel is exited with status code EXIT_FAILURE (1). Whole behaviour
+ * depends on the state, when the function is called:
+ *
+ * 1. when karel is not running:
+ * only the error message is print out
+ *
+ * 2. when karel is not running and the summary is on
+ * only error message is print out in the form of summary type
+ *
+ * 3. when karel is running and no summary is on
+ * error message is written to the Karel's UI
+ *
+ * 4. when karel is running and summary is on
+ * error message with the world representation without walls is print out in the form of summary type
+ */
 void _error_shut_off(const char *format, ...);
 
 
@@ -104,7 +121,7 @@ void _deinit();
  * Export is useful in summary mode only. Summary mode can be enabled
  * with environment variable LIBKAREL_SUMMARY_MODE with it's value "true".
  */
-void _export_data();
+void _export_data(const char* format, ...);
 
 
 /**

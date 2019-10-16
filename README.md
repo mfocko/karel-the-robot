@@ -7,6 +7,25 @@ programming language*.
 For more information about Karel the robot visit the Wikipedia page at
 http://en.wikipedia.org/wiki/Karel_(programming_language)
 
+## Usage
+
+There are two libraries included in this package:
+
+* `karel.h` - the basic _Karel the Robot_ library with the essential commands and sensors; suitable for beginneris in programming
+* `superkarel.h` - the extended version of _Karel the Robot_ library, when _Karel_ is fully equipped with all of the sensors and commands; suitable for problem solvers
+
+To compile program with _karel.h_ library:
+
+```bash
+gcc program.c -o program -lkarel -lcurses
+```
+
+To compile program with _superkarel.h_ library:
+
+```bash
+gcc program.c -o program -lkarel -lcurses
+```
+
 
 ## Dependencies
 
