@@ -2,6 +2,12 @@
 
 ## Todo
 
+### Version Info
+
+* provide version info some way
+    * in credits?
+    * `--version` / `-v` ?
+
 ### Refactoring the Export
 
 * move `internals.c` to `core.c`
