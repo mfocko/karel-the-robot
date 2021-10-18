@@ -1,7 +1,7 @@
 Name:           libkarel
 Version:        2019.1
 Release:        1%{?dist}
-Summary:        C library that provides Karel the Robot interface.
+Summary:        C library that provides Karel the Robot interface
 License:        GPLv3
 URL:            https://git.kpi.fei.tuke.sk/kpi/karel-the-robot
 Source0:        karel-%{version}.tar.gz
