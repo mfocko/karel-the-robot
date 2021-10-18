@@ -12,6 +12,7 @@ BuildRequires:  make
 BuildRequires:  ncurses-devel
 BuildRequires:  gettext-devel
 BuildRequires:  check-devel
+Requires:       ncurses-devel
 
 %undefine _hardened_build
 %define _debugsource_template %{nil}
