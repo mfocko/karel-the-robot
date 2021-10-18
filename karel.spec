@@ -36,7 +36,7 @@ Requires:       ncurses-devel
 %{_prefix}/lib/libsuperkarel.a
 %{_includedir}/karel.h
 %{_includedir}/superkarel.h
-%{_docdir}/libkarel/*
+%{_prefix}/share/doc/libkarel/*
 
 %doc README.md
 
