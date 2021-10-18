@@ -14,7 +14,7 @@ set(CMAKE_C_FLAGS  "-Wall -Werror -pedantic -std=c11 -g")
 #set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 # Set build features
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 # include directories
 include_directories(include ${CURSES_INCLUDE_DIR})
