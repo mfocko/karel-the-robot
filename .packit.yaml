@@ -12,3 +12,4 @@ jobs:
     targets:
     - fedora-stable
     - opensuse-tumbleweed
+    - opensuse-15.3
