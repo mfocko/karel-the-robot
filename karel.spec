@@ -4,7 +4,7 @@ Release:        1%{?dist}
 Summary:        C library that provides Karel the Robot interface
 License:        GPLv3
 URL:            https://git.kpi.fei.tuke.sk/kpi/karel-the-robot
-Source0:        karel-%{version}.tar.gz
+Source0:        karel-the-robot-%{version}.tar.gz
 BuildArch:      x86_64
 BuildRequires:  gcc
 BuildRequires:  cmake
