@@ -3,6 +3,8 @@ specfile_path: karel.spec
 upstream_package_name: karel-the-robot
 downstream_package_name: libkarel
 
+srpm_build_deps: []
+
 jobs:
 - job: copr_build
   trigger: pull_request
@@ -10,6 +12,6 @@ jobs:
     owner: mfocko
     project: karel
     targets:
-    - fedora-stable
+    - fedora-all
     - opensuse-tumbleweed
     - opensuse-15.3
