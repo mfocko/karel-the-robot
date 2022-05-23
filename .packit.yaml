@@ -8,10 +8,17 @@ srpm_build_deps: []
 jobs:
 - job: copr_build
   trigger: pull_request
-  metadata:
-    owner: mfocko
-    project: karel
-    targets:
-    - fedora-all
-    - opensuse-tumbleweed
-    - opensuse-15.3
+  targets:
+  - fedora-all
+  - opensuse-tumbleweed
+  - opensuse-15.3
+
+- job: copr_build
+  trigger: commit
+  branch: main
+  owner: mfocko
+  project: karel
+  targets:
+  - fedora-all
+  - opensuse-tumbleweed
+  - opensuse-15.3
